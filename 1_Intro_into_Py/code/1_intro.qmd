@@ -1,0 +1,71 @@
+# Introduction into python
+
+## Python functions 
+
+The syntax for writing a function in python. `add_numbers` is a function that takes two numbers and adds them together.
+
+```{python}
+def add_numbers(x, y):
+    return x + y
+
+add_numbers(1,2)
+```
+
+We can easily change this to take 3 arguments instead of 2. we can also make the 3rd parameter optional.  
+
+All of the optional parameters, the ones that you got default values for, need to come at the end of the function declaration. It also means that you can pass an optional parameters as labeled values.
+
+```{python}
+def add_numbers(x, y, z=None):
+    if z == None:
+        return x + y
+    else:
+        return x + y + z
+
+print(add_numbers(1,2))
+print(add_numbers(1,2,3))
+```
+
+`add_numbers` updated to take an optional flag parameter.
+
+```{python}
+def add_numbers(x, y, z=None, flag=False):
+    if (flag):
+        print('Flag is true!')
+    if (z == None):
+        return x + y
+    else:
+        return x + y + z
+
+
+print(add_numbers(1, 2, flag=True))
+```
+
+We can use this for functions to add different modes of operation, i.e. we can add versus subtract:
+
+```{python}
+def do_math(a, b, kind=None):
+  if (kind=='add'):
+    return a+b
+  else:
+    return a-b
+
+do_math(1, 2, kind='add')
+```
+
+We can also assign function `add_numbers` to variable `a`.
+
+```{python}
+def add_numbers(x, y):
+    return x + y
+
+
+a = add_numbers
+a(1, 2)
+```
+
+
+## Python Types and Sequences
+
+
+

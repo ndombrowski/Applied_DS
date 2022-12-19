@@ -1,0 +1,9 @@
+0_Materials/
+*.quarto/
+*.xlsx
+*.pdf
+*.png
+*.DS_Store
+*.Rhistory
+*content.sqlite*
+*index.sqlite
