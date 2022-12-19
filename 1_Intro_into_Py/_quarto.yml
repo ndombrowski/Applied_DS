@@ -9,6 +9,7 @@ book:
   chapters:
     - index.qmd
     - code/1_intro.qmd
+    - code/2_numpy.qmd
 
 format:
   html:

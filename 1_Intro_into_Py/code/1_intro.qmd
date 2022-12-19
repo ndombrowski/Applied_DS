@@ -67,5 +67,706 @@ a(1, 2)
 
 ## Python Types and Sequences
 
+We identify the type of a variable using the `type()` function:
 
+```{python}
+type(add_numbers)
+```
+
+### Tuples
+
+Tuples are an immutable data structure (cannot be altered). We write tuples using parentheses and we can mix types within a tuple.
+
+```{python}
+x = (1, 'a', 2, 'b')
+type(x)
+```
+
+### Lists
+
+Lists are a mutable data structure. A list is declared using a squared bracket. 
+
+```{python}
+x = [1, 'a', 2, 'b']
+type(x)
+```
+
+We can change the contents of a list, for example using the append function, which appends new items to the end of a list
+
+```{python}
+x.append(3.3)
+x
+```
+
+### For loops
+
+Both list and tuples are iterable types, so we can write loops to go through every value they hold. 
+
+```{python}
+for item in x:
+    print(item)
+
+print('')
+```
+
+
+### Arrays
+
+Lists and tuples can also be accessed as arrays by using the square bracket operator, which is called the indexing operator.  
+
+The first item of the list starts at position zero and to get the length of the list, we use the built in len function. 
+
+```{python}
+i = 0
+
+while (i != len(x)):
+    print(x[i])
+    i = i + 1
+
+print('')
+```
+
+### Concatenate lists
+
+```{python}
+[1, 2] + [3, 4]
+```
+
+### Repeat values in a list
+
+```{python}
+[1,2] * 3
+```
+
+
+### The in operator
+
+We use the `in` operator to check if something is inside a list.
+
+```{python}
+1 in [1,2,3]
+```
+
+```{python}
+1 in [0,4,5]
+```
+
+
+### Slicing
+
+In Python, the indexing operator allows you to submit multiple values.  
+The first parameter is the starting location, if this is the only element then one item is return from the list.  
+
+The second parameter is the end of the slice. It's an exclusive end so if you slice with the first parameter being zero the next parameter being one, then you only get back one item.
+
+```{python}
+x = 'This is a string'
+print(x[0])  #first character
+print(x[0:1])  #first character, but we have explicitly set the end character
+print(x[0:2])  #first two characters
+
+```
+
+Our index values can also be negative to index from the back of the string.  
+
+```{python}
+x[-1]
+```
+
+```{python}
+#all characters from the 4th last to the second last
+x[-4:-2]
+```
+
+Start at the first and going until the 3rd:
+
+```{python}
+x[:3]
+```
+
+Start with the fourth character and go to the end of the list
+
+```{python}
+x[4:]
+```
+
+### Strings
+
+A lot of the operations we have done before, we can also do on strings
+
+```{python}
+firstname = 'Christopher'
+lastname = 'Brooks'
+
+#concatenate two strings
+print(firstname + ' ' + lastname)
+
+#repeat strings
+print(firstname *2)
+
+#search for strings
+print('Chris' in firstname)
+```
+
+Before concatenating strings, we have to make sure to convert objects to strings. i.e. this does not work
+
+```
+'Chris' + 2
+```
+
+but this does:
+
+```{python}
+'Chris' + str(2)
+```
+
+
+### Split
+
+**split** breaks up a string and returns a list of all the words in a string, or a list split on a specific character.
+
+Below, we split up the string based on the presence of a space character resulting in a list of four elements. We can then use an index operator to choose parts of the list:
+
+```{python}
+# [0] selects the first element of the list
+firstname = 'Christopher Arthur Hansen Brooks'.split(' ')[0]  
+
+# [-1] selects the last element of the list
+lastname = 'Christopher Arthur Hansen Brooks'.split(' ')[-1]  
+
+print(firstname)
+print(lastname)
+```
+
+
+
+## Dictionaries
+
+Dictionaries are similar to lists and tuples in that they hold a collection of items, but they're labeled collections which do not have an ordering. This means that for each value you insert into the dictionary, you must also give a key to get that value out. A dictionary is denoted by curly brackets.  
+
+We indicate each item of the dictionary when creating it using a pair of values separated by colons. 
+
+We can retrieve a value for a given label using the indexing operator.
+
+```{python}
+x = {'Christopher Brooks': 'brooksch@umich.edu', 'Bill Gates': 'billg@microsoft.com'}
+
+# Retrieve a value by using the indexing operator
+x['Christopher Brooks']  
+```
+
+We can also add new items to the dictionary:
+
+```{python}
+x['Kevin Thompson'] = None
+x
+```
+
+
+```{python}
+#access the values
+x.values()
+```
+
+```{python}
+#access the key:value pairs
+x.items()
+```
+
+We can iterate through the items in a dictionary, i.e. we can iterate over all the keys:
+
+```{python}
+for name in x:
+    print(x[name])
+
+print('')
+```
+
+Iterate over all the values:
+
+```{python}
+for email in x.values():
+    print(email)
+
+print('')    
+```
+
+We can also iterate over all the keys and items in a dictionary:
+
+```{python}
+for name, email in x.items():
+    print(name)
+    print(email)
+
+print('')
+```
+
+### Unpacking
+
+In Python you can have a sequence. That's a list or a tuple of values, and you can unpack those items into different variables through assignment in one statement. 
+
+```{python}
+x = ('Christopher', 'Brooks', 'brooksch@umich.edu')
+fname, lname, email = x
+
+print(fname)
+print(lname)
+print(x)
+```
+
+Make sure the number of values you are unpacking matches the number of variables being assigned. I.e. the code below would give an error:
+
+```
+x = ('Christopher', 'Brooks', 'brooksch@umich.edu', 'Ann Arbor')
+fname, lname, email = x
+```
+
+
+## Python More on Strings
+
+The Python string formatting mini language allows you to write a string statement indicating placeholders for variables to be evaluated. You then pass these variables in either named or in order arguments, and Python handles the string manipulation for you.  
+
+We can write a sales statement string which includes these items using curly brackets.
+
+
+We can then call the **format method** on that string and pass in the values that we want substituted as appropriate.
+
+```{python}
+sales_record = {
+    'price': 3.24,
+    'num_items': 4,
+    'person': 'Chris'}
+
+sales_statement = '{} bought {} item(s) at a price of {} each for a total of {}'
+
+print(sales_statement.format(sales_record['person'],
+sales_record['num_items'],
+sales_record['price'],
+sales_record['num_items'] * sales_record['price']))
+```
+
+
+## Reading and Writing CSV files
+
+Let's import our datafile `../data/mpg.csv`, which contains fuel economy data for 234 cars, using the csv module.
+
+* mpg : miles per gallon
+* class : car classification
+* cty : city mpg
+* cyl : # of cylinders
+* displ : engine displacement in liters
+* drv : f = front-wheel drive, r = rear wheel drive, 4 = 4wd
+* fl : fuel (e = ethanol E85, d = diesel, r = regular, p = premium, c = CNG)
+* hwy : highway mpg
+* manufacturer : automobile manufacturer
+* model : model of car
+* trans : type of transmission
+* year : model year
+
+```{python}
+import csv
+```
+
+```{python}
+with open('../data/mpg.csv') as csvfile:
+    #read in data as a dictionary
+    mpg = list(csv.DictReader(csvfile))
+
+mpg[:3]
+```
+
+```{python}
+#print the length of our list
+len(mpg)
+```
+
+
+The length of our list is 234, meaning we have a dictionary for each of the 234 cars in the CSV file.
+
+```{python}
+#print column names
+mpg[0].keys()
+```
+
+Find the average cty fuel economy across all cars. All values in the dictionaries are strings, so we need to convert to float.
+
+```{python}
+sum(float(d['cty']) for d in mpg) / len(mpg)
+```
+
+Find the average city MPG grouped by the number of cylinders a car has.
+
+We use **set** to return the unique values for the number of cylinders the cars in our dataset have.
+
+```{python}
+cylinders = set(d['cyl'] for d in mpg)
+cylinders
+```
+
+```{python}
+#create empty list to store our calculations
+CtyMpgByCyl = []
+
+#iterate over all cylinder levels and then over all dics
+for c in cylinders:
+    summpg = 0
+    cyltypecount = 0
+    #iterate over dics
+    for d in mpg:
+        #if the cylinder type matches add the cty mpg and increment the count
+        if d['cyl'] == c:
+            summpg += float(d['cty'])
+            cyltypecount += 1
+    # append the tuple ('cylinder', 'avg mpg')
+    CtyMpgByCyl.append((c, summpg/cyltypecount))
+
+#sort the list (lambda will be covered a bit later)
+CtyMpgByCyl.sort(key=lambda x: x[0])
+CtyMpgByCyl
+```
+
+Next, lets find the average highway MPG for the different vehicle classes.
+
+```{python}
+#find the different vehicle classes
+vehicleclass = set(d['class'] for d in mpg)
+vehicleclass
+```
+
+```{python}
+HwyMpgByClass = []
+
+for t in vehicleclass:
+    summpg = 0
+    vclasscount = 0
+    for d in mpg:
+        if d['class'] == t:
+            summpg += float(d['hwy'])
+            vclasscount += 1
+    HwyMpgByClass.append((t, summpg/vclasscount))
+
+HwyMpgByClass.sort(key=lambda x : x[1])
+HwyMpgByClass
+```
+
+
+## Dates and Times
+
+One of the most common legacy methods for storing the date and time in online transactions systems is based on the offset from the epoch, which is January 1, 1970.
+
+In Python, you can get the current time since the epoch using the time module. You can then create a time stamp using the from time stamp function on the date time object. When we print this value out, we see that the year, month, day, and so forth are also printed out.
+
+```{python}
+import datetime as dt
+import time as tm
+```
+
+`time` returns the current time in seconds since the Epoch. (January 1st, 1970)
+
+```{python}
+tm.time()
+```
+
+Create a timestamp:
+
+```{python}
+dtnow = dt.datetime.fromtimestamp(tm.time())
+dtnow
+```
+
+The date time object has handy attributes to get the representative hour, day, seconds, etc.
+
+```{python}
+# get year, month, day, etc.from a datetime
+dtnow.year, dtnow.month, dtnow.day, dtnow.hour, dtnow.minute, dtnow.second  
+```
+
+Date time objects allow for simple math using **time deltas**. For instance, here, we can create a time delta of 100 days, then do subtraction and comparisons with the date time object.
+
+```{python}
+#create a timedelta of 100 days
+delta = dt.timedelta(days = 100)
+delta
+```
+
+```{python}
+#return the current local date
+today = dt.date.today()
+today
+```
+
+```{python}
+#extract the data 100 days ago
+today - delta
+```
+
+```{python}
+#compare dates
+today > today - delta
+```
+
+
+## Objects and map()
+
+We can define a class using the **class** keyword.
+
+Classes in Python are generally named using camel case, which means the first character of each word is capitalized.
+
+Class variables can also be declared. These are just variables which are shared across all instances. So in this example, we're saying that the default for all people is at the school of information.  
+
+To define a method, you just write it as you would have a function. The one change, is that to have access to the instance, which a method is being invoked upon, you must include self, in the method signature. Similarly, if you want to refer to instance variables set on the object, you prepend them with the word self, with a full stop.  
+
+In this definition of a person, for instance, we have written two methods. Set name and set location. And both change instance bound variables, called name and location respectively
+
+```{python}
+class Person:
+    #set a class variable
+    department = 'School of Information'
+    
+    #define a method
+    def set_name(self, new_name):
+        self.name = new_name
+    
+    def set_location(self, new_location):
+        self.location = new_location
+    
+person = Person()
+person.set_name('Chris Vrooks')
+person.set_location('Mi, USA')
+
+print('{} lives in {} and works in the department {}'. format(person.name,
+person.location, person.department))
+```
+
+There are a couple of implications of object-oriented programming in Python:
+
+- Objects in Python do not have private or protected members. If you instantiate an object, you have full access to any of the methods or attributes of that object
+- There's no need for an explicit constructor when creating objects in Python. You can add a constructor if you want to by declaring the `__init__` method
+
+The **map function** is one of the basis for functional programming in Python, it executes a specified function for each item in an iterable.
+
+**Functional programming** is a programming paradigm in which you explicitly declare all parameters which could change through execution of a given function. Thus functional programming is referred to as being side-effect free, because there is a software contract that describes what can actually change by calling a function. 
+
+The map built-in function is one example of a functional programming feature of Python, that ties together a number of aspects of the language.
+
+The map function signature looks like this:
+- The first parameters of function that you want executed
+- The second parameter, and every following parameter, is something which can be iterated upon
+
+Imagine we have two list of numbers, maybe prices from two different stores on exactly the same items. And we wanted to find the minimum that we would have to pay if we bought the cheaper item between the two stores. To do this, we could iterate through each list, comparing items and choosing the cheapest. With map, we can do this comparison in a single statement.
+
+```{python}
+store1 = [10.00, 11.00, 12.34, 2.34]
+store2 = [9.00, 11.10, 12.34, 2.01]
+
+cheapest = map(min, store1, store2)
+cheapest
+```
+
+When we go to print out the map, we see that we get an odd reference value instead of a list of items that we're expecting. This is called **lazy evaluation**. In Python, the map function returns to you a map object. It doesn't actually try and run the function min on two items, until you look inside for a value. This allows us to have very efficient memory management, even though something might be computationally complex.  
+
+Maps are iterable, just like lists and tuples, so we can use a for loop to look at all of the values in the map.
+
+```{python}
+for item in cheapest:
+    print(item)
+
+print('')
+```
+
+**Question**: 
+
+Here is a list of faculty teaching this MOOC. Can you write a function and apply it using map() to get a list of all faculty titles and last names (e.g. ['Dr. Brooks', 'Dr. Collins-Thompson', …]) ?
+
+```{python}
+people = ['Dr. Christopher Brooks', 'Dr. Kevyn Collins-Thompson', 'Dr. VG Vinod Vydiswaran', 'Dr. Daniel Romero']
+
+def split_title_and_name(person):
+    title = person.split()[0]
+    lastname = person.split()[-1]
+    return '{} {}'.format(title, lastname)
+
+list(map(split_title_and_name, people))
+```
+
+
+## Advanced Python Lambda and List Comprehensions
+
+**Lambda's** are Python's way of creating anonymous functions. These are the same as other functions, but they have no name. The intent is that they're simple or short lived and it's easier just to write out the function in one line instead of going to the trouble of creating a named function.
+
+**You declare a lambda function with the word lambda followed by a list of arguments, followed by a colon and then a single expression.** This is key: There's only one expression to be evaluated in a lambda. The expression value is returned on execution of the lambda.
+
+```{python}
+my_function = lambda a,b,c: a + b
+```
+
+The return of a lambda is a function reference. So in the case above, we would execute my_function and pass in three different parameters.
+
+```{python}
+my_function(4,5,6)
+```
+
+Note that you can't have default values for lambda parameters and you can't have complex logic inside of the lambda itself because you're limited to a single expression. Therefore, lambdas are more limited than full function definitions.
+
+Another example, in which we add 10 to argument a, and return the result:
+
+```{python}
+x = lambda a : a + 10
+print(x(5))
+```
+
+You can apply the function above to an argument by surrounding the function and its argument with parentheses:
+
+```{python}
+(lambda x: x + 1)(5)
+```
+
+Because a lambda function is an expression, it can be named. Therefore you could write the previous code as follows:
+
+```{python}
+add_one = lambda x: x + 1
+add_one(5)
+```
+
+
+**Exercise**
+
+Convert the code below into a lambda:
+
+```{python}
+people = ['Dr. Christopher Brooks', 'Dr. Kevyn Collins-Thompson', 'Dr. VG Vinod Vydiswaran', 'Dr. Daniel Romero']
+
+def split_title_and_name(person):
+    return person.split()[0] + ' ' + person.split()[-1]
+
+list(map(split_title_and_name, people))
+```
+
+
+```{python}
+#option 1
+for person in people:
+    print((lambda x: x.split()[0] + ' ' + x.split()[-1])(person))
+
+print('')
+```
+
+```{python}
+#option 2
+list(map(lambda person: person.split()[0] + ' ' + person.split()[-1], people))
+```
+
+
+### List comprehensions
+
+We've learned a lot about sequences and in Python. Tuples, lists, dictionaries and so forth.  
+
+Sequences are structures that we can iterate over, and often we create these through loops or by reading in data from a file.
+
+Python has built in support for creating these collections using a more abbreviated syntax called list comprehensions. The basic syntax looks as follows:
+
+```
+newlist = [expression for item in iterable if condition == True]
+```
+
+Let's start with how we usually write for loops:
+
+```{python}
+my_list = []
+
+for number in range(0,100):
+    #check for evenly dividing numbers
+    if number % 2 == 0:
+        my_list.append(number)
+
+my_list
+```
+
+We can do the same with a list comprehension. We start the list comprehension with the value we want in the list. In this case, it's a number. Then we put it in the for-loop, and then finally, we add any condition clauses. 
+
+```{python}
+my_list = [number for number in range(0,100) if number % 2 == 0]
+my_list
+```
+
+Another example:
+
+```{python}
+fruits = ["apple", "banana", "cherry", "kiwi", "mango"]
+
+newlist = [x for x in fruits if "a" in x]
+
+print(newlist)
+```
+
+Notice, that the if statement is optional:
+
+```{python}
+newlist = [x for x in fruits]
+newlist
+```
+
+The expression is the current item in the iteration, but it is also the outcome, which you can manipulate before it ends up like a list item in the new list:
+
+```{python}
+newlist = [x.upper() for x in fruits]
+newlist
+```
+
+The expression can also contain conditions, not like a filter, but as a way to manipulate the outcome:
+
+```{python}
+newlist = [x if x != "banana" else "orange" for x in fruits]
+newlist
+```
+
+
+
+**Exercise**:
+
+The function to convert:
+
+```{python}
+def times_tables():
+    lst = []
+    for i in range(10):
+        for j in range (10):
+            lst.append(i*j)
+    return lst
+```
+
+
+The list comprehension:
+
+```{python}
+times_tables() == [i*j for i in range(10) for j in range(10)]
+```
+
+**Question**
+
+Many organizations have user ids which are constrained in some way. Imagine you work at an internet service provider and the user ids are all two letters followed by two numbers (e.g. aa49). Your task at such an organization might be to hold a record on the billing activity for each possible user. 
+
+Write an initialization line as a single list comprehension which creates a list of all possible user ids. Assume the letters are all lower case.
+
+```{python}
+#lowercase = 'abcdefghijklmnopqrstuvwxyz'
+#digits = '0123456789'
+
+my_list = []
+lowercase = 'ab'
+digits = '01'
+
+my_list = [a+b+c+d for a in lowercase for b in lowercase for c in digits for d in digits]
+
+my_list[0:4]
+```
+
+```{python}
+len(my_list)
+```
+
+
+answer = [???]
+correct_answer == answer
+```
 
