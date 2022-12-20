@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Applied Data Science Course 1 - 4&nbsp; Regex</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../code/2_numpy.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regex</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Applied Data Science Course 1</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Data Science in Python</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/1_intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction into python</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/2_numpy.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Numpy</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/3_regular_expressions.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regex</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#patterns-and-character-classes" id="toc-patterns-and-character-classes" class="nav-link active" data-scroll-target="#patterns-and-character-classes"><span class="toc-section-number">4.1</span>  Patterns and character classes</a></li>
+  <li><a href="#quantifiers" id="toc-quantifiers" class="nav-link" data-scroll-target="#quantifiers"><span class="toc-section-number">4.2</span>  Quantifiers</a></li>
+  <li><a href="#groups" id="toc-groups" class="nav-link" data-scroll-target="#groups"><span class="toc-section-number">4.3</span>  Groups</a></li>
+  <li><a href="#look-ahead-and-look-behind" id="toc-look-ahead-and-look-behind" class="nav-link" data-scroll-target="#look-ahead-and-look-behind"><span class="toc-section-number">4.4</span>  Look-ahead and Look-behind</a></li>
+  <li><a href="#example-wiki-data" id="toc-example-wiki-data" class="nav-link" data-scroll-target="#example-wiki-data"><span class="toc-section-number">4.5</span>  Example wiki data:</a></li>
+  <li><a href="#example-new-york-times-and-hashtags" id="toc-example-new-york-times-and-hashtags" class="nav-link" data-scroll-target="#example-new-york-times-and-hashtags"><span class="toc-section-number">4.6</span>  Example: New York Times and Hashtags</a></li>
+  <li><a href="#other" id="toc-other" class="nav-link" data-scroll-target="#other"><span class="toc-section-number">4.7</span>  Other</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regex</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>In this lecture we’re going to talk about pattern matching in strings using regular expressions.</p>
+<p>Regular expressions, or regexes, are written in a condensed formatting language. In general, you can think of a regular expression as a pattern which you give to a regex processor with some source data. The processor then parses that source data using that pattern, and returns chunks of text back to the a data scientist or programmer for further manipulation.</p>
+<p>There’s really three main reasons you would want to do this:</p>
+<ul>
+<li>to check whether a pattern exists within some source data</li>
+<li>to get all instances of a complex pattern from some source data</li>
+<li>to clean your source data using a pattern generally through string splitting</li>
+</ul>
+<p>Regexes are not trivial, but they are a foundational technique for data cleaning in data science applications, and a solid understanding of regexs will help you quickly and efficiently manipulate text data for further data science application.</p>
+<p>Now, you could teach a whole course on regular expressions alone, especially if you wanted to demystify how the regex parsing engine works and efficient mechanisms for parsing text.</p>
+<p>By the end of this lecture, you will understand the basics of regular expressions, how to define patterns for matching, how to apply these patterns to strings, and how to use the results of those patterns in data processing.</p>
+<p>Finally, a note that in order to best learn regexes you need to write regexes. I encourage you to stop the video at any time and try out new patterns or syntax you learn at any time. Also, a good documentation can be found <a href="https://docs.python.org/3/library/re.html">here</a>.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are several main processing functions in re that you might use. The first, <code>match()</code> checks for a match that is at the beginning of the string and returns a boolean. Similarly, <code>search()</code>, checks for a match anywhere in the string, and returns a boolean.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lets create some text for an example</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"This is a good day."</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#see if its a good day or not</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> re.search(<span class="st">'good'</span>, text):</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Wonderful'</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Alas'</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Wonderful
+</code></pre>
+</div>
+</div>
+<p>In addition to checking for conditionals, we can segment a string. The work that regex does here is called <strong>tokenizing</strong>, where the string is separated into substrings based on patterns.</p>
+<p>The <code>findall()</code> and <code>split()</code> functions will parse the string for us and return chunks. Lets try and example</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"Amy works diligently. Amy gets good grades. Our student Amy is succesful."</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># This is a bit of a fabricated example, but lets split this on all instances of Amy</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>re.split(<span class="st">'Amy'</span>, text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>['',
+ ' works diligently. ',
+ ' gets good grades. Our student ',
+ ' is succesful.']</code></pre>
+</div>
+</div>
+<p>You’ll notice that split has returned an empty string, followed by a number of statements about Amy, all as elements of a list. If we wanted to count how many times we have talked about Amy, we could use <code>findall()</code>.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'Amy'</span>, text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>['Amy', 'Amy', 'Amy']</code></pre>
+</div>
+</div>
+<p>We’ve seen that .search() looks for some pattern and returns a boolean, that .split() will use a pattern for creating a list of substrings, and that .findall() will look for a pattern and pull out all occurrences.</p>
+<p>Now that we know how the python regex API works, lets talk about more complex patterns. The regex specification standard defines a markup language to describe patterns in text.</p>
+<p>Lets start with anchors. <strong>Anchors</strong> specify the start and/or the end of the string that you are trying to match. The caret character <code>^</code> means start and the dollar sign character <code>$</code> means end.</p>
+<p>If you put <code>^</code> before a string, it means that the text the regex processor retrieves must start with the string you specify. For ending, you have to put the <code>$</code> character after the string, it means that the text Regex retrieves must end with the string you specify.</p>
+<p>Here’s an example:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"Amy works diligently. Amy gets good grades. Our student Amy is succesful."</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#see if the text begins with the word Amy</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>re.search(<span class="st">'^Amy'</span>, text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>&lt;re.Match object; span=(0, 3), match='Amy'&gt;</code></pre>
+</div>
+</div>
+<p>Notice that re.search() actually returned to us a new object, called <strong>re.Match object</strong>.</p>
+<p>An re.Match object always has a boolean value of True, as something was found, so you can always evaluate it in an if statement as we did earlier. The rendering of the match object also tells you what pattern was matched, in this case the word Amy, and the location the match was in, as the span.</p>
+<section id="patterns-and-character-classes" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="patterns-and-character-classes"><span class="header-section-number">4.1</span> Patterns and character classes</h2>
+<p>Let’s talk more about patterns and start with character classes. Let’s create a string of a single learners’ grades over a semester in one course across all of their assignments.</p>
+<p>If we want to answer the question “How many B’s were in the grade list?” we would just use B.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>grades<span class="op">=</span><span class="st">"ACAAAABCBCBAA"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'B'</span>, grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>['B', 'B', 'B']</code></pre>
+</div>
+</div>
+<p>If we wanted to count the number of A’s or B’s in the list, we can’t use “AB” since this is used to match all A’s followed immediately by a B. Instead, we put the characters A and B inside <strong>square brackets</strong>.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'[AB]'</span>, grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>['A', 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'A', 'A']</code></pre>
+</div>
+</div>
+<p>This is called the <strong>set operator</strong>.</p>
+<p>You can also include a range of characters, which are ordered alphanumerically.</p>
+<p>For instance, if we want to refer to all lower case letters we could use [a-z] Lets build a simple regex to parse out all instances where this student receive an A followed by a B or a C.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'[A][B-C]'</span>, grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>['AC', 'AB']</code></pre>
+</div>
+</div>
+<p>Notice how the <code>[AB]</code> pattern describes a set of possible characters which could be either (A OR B), while the <code>[A][B-C]</code> pattern denoted two sets of characters which must have been matched back to back. You can write this pattern by using the <strong>pipe operator</strong>, which means OR.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">"AB|AC"</span>,grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>['AC', 'AB']</code></pre>
+</div>
+</div>
+<p>We can use the <strong>caret with the set operator to negate our results</strong>. For instance, if we want to parse out only the grades which were not A’s:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'[^A]'</span>, grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>['C', 'B', 'C', 'B', 'C', 'B']</code></pre>
+</div>
+</div>
+<p>Note this carefully - <strong>the caret was previously matched to the beginning of a string as an anchor point, but inside of the set operator the caret, and the other special characters we will be talking about, lose their meaning</strong>. This can be a bit confusing.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'^[^A]'</span>, grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>[]</code></pre>
+</div>
+</div>
+<p>The code above gives an empty list, because the regex says that we want to match any value at the beginning of the string which is not an A. Our string though starts with an A, so there is no match found. And remember when you are using the set operator you are doing character-based matching. So you are matching individual characters in an OR method.</p>
+</section>
+<section id="quantifiers" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="quantifiers"><span class="header-section-number">4.2</span> Quantifiers</h2>
+<p>Quantifiers are the number of times you want a pattern to be matched in order to match.</p>
+<p>The most basic quantifier is expressed as <code>e{m,n}</code>, where e is the expression or character we are matching, m is the minimum number of times you want it to matched, and n is the maximum number of times the item could be matched.</p>
+<p>Let’s use these grades as an example. How many times has this student been on a back-to-back A’s streak?</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">## we'll use 2 as our min, but ten as our max</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'A{2,10}'</span>, grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>['AAAA', 'AA']</code></pre>
+</div>
+</div>
+<p>So we see that there were two streaks, one where the student had four A’s, and one where they had only two A’s.</p>
+<p>We might try and do this using single values and just repeating the pattern</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'A{1,1}A{1,1}'</span>, grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>['AA', 'AA', 'AA']</code></pre>
+</div>
+</div>
+<p>As you can see, this is different than the first example. The first pattern is looking for any combination of two A’s up to ten A’s in a row. So it sees four A’s as a single streak.</p>
+<p>The second pattern is looking for two A’s back to back, so it sees two A’s followed immediately by two more A’s. We say that the regex processor begins at the start of the string and consumes variables which match patterns as it does.</p>
+<p>It’s important to note that the regex quantifier syntax does not allow you to deviate from the {m,n} pattern. In particular, if you have an extra space in between the braces you’ll get an empty result:</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">"A{2, 2}"</span>,grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>[]</code></pre>
+</div>
+</div>
+<p>And as we have already seen, if we don’t include a quantifier then the default is {1,1}:</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'AA'</span>, grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>['AA', 'AA', 'AA']</code></pre>
+</div>
+</div>
+<p>If you just have one number in the braces, it’s considered to be both m and n:</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'A</span><span class="sc">{2}</span><span class="st">'</span>, grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>['AA', 'AA', 'AA']</code></pre>
+</div>
+</div>
+<p>Using this, we could find a decreasing trend in a student’s grades</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'A{1,10}B{1,10}C{1,10}'</span>, grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>['AAAABC']</code></pre>
+</div>
+</div>
+<p>Now, that’s a bit of a hack, because we included a maximum that was just arbitrarily large. There are three other quantifiers that are used as short hand:</p>
+<ul>
+<li>an <strong>asterix <code>*</code> </strong> to match 0 or more times</li>
+<li>a <strong>question mark ?</strong> to match one or more times</li>
+<li>a <strong>+ plus sign</strong> to match one or more times.</li>
+</ul>
+<p>Lets look at a more complex example, and load some data scraped from wikipedia</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'../data/week1/ferpa.txt'</span>, <span class="st">'r'</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    wiki <span class="op">=</span> <span class="bu">file</span>.read()</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>wiki</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>'Overview[edit]\nFERPA gives parents access to their child\'s education records, an opportunity to seek to have the records amended, and some control over the disclosure of information from the records. With several exceptions, schools must have a student\'s consent prior to the disclosure of education records after that student is 18 years old. The law applies only to educational agencies and institutions that receive funds under a program administered by the U.S. Department of Education.\n\nOther regulations under this act, effective starting January 3, 2012, allow for greater disclosures of personal and directory student identifying information and regulate student IDs and e-mail addresses.[2] For example, schools may provide external companies with a student\'s personally identifiable information without the student\'s consent.[2]\n\nExamples of situations affected by FERPA include school employees divulging information to anyone other than the student about the student\'s grades or behavior, and school work posted on a bulletin board with a grade. Generally, schools must have written permission from the parent or eligible student in order to release any information from a student\'s education record.\n\nThis privacy policy also governs how state agencies transmit testing data to federal agencies, such as the Education Data Exchange Network.\n\nThis U.S. federal law also gave students 18 years of age or older, or students of any age if enrolled in any post-secondary educational institution, the right of privacy regarding grades, enrollment, and even billing information unless the school has specific permission from the student to share that specific type of information.\n\nFERPA also permits a school to disclose personally identifiable information from education records of an "eligible student" (a student age 18 or older or enrolled in a postsecondary institution at any age) to his or her parents if the student is a "dependent student" as that term is defined in Section 152 of the Internal Revenue Code. Generally, if either parent has claimed the student as a dependent on the parent\'s most recent income tax statement, the school may non-consensually disclose the student\'s education records to both parents.[3]\n\nThe law allowed students who apply to an educational institution such as graduate school permission to view recommendations submitted by others as part of the application. However, on standard application forms, students are given the option to waive this right.\n\nFERPA specifically excludes employees of an educational institution if they are not students.\n\nThe act is also referred to as the Buckley Amendment, for one of its proponents, Senator James L. Buckley of New York.\n\nAccess to public records[edit]\nThe citing of FERPA to conceal public records that are not "educational" in nature has been widely criticized, including by the act\'s primary Senate sponsor.[4] For example, in the Owasso Independent School District v. Falvo case, an important part of the debate was determining the relationship between peer-grading and "education records" as defined in FERPA. In the Court of Appeals, it was ruled that students placing grades on the work of other students made such work into an "education record." Thus, peer-grading was determined as a violation of FERPA privacy policies because students had access to other students\' academic performance without full consent.[5] However, when the case went to the Supreme Court, it was officially ruled that peer-grading was not a violation of FERPA. This is because a grade written on a student\'s work does not become an "education record" until the teacher writes the final grade into a grade book.[6]\n\nStudent medical records[edit]\nLegal experts have debated the issue of whether student medical records (for example records of therapy sessions with a therapist at an on-campus counseling center) might be released to the school administration under certain triggering events, such as when a student sued his college or university.[7][8]\n\nUsually, student medical treatment records will remain under the protection of FERPA, not the Health Insurance Portability and Accountability Act (HIPAA). This is due to the "FERPA Exception" written within HIPAA.[9]'</code></pre>
+</div>
+</div>
+<p>Scanning through this document one of the things we notice is that the headers all have the words [edit] behind them, followed by a newline character. So if we wanted to get a list of all of the headers in this article we could do so using re.findall:</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'[a-zA-Z]{1,100}\[edit\]'</span>, wiki)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>['Overview[edit]', 'records[edit]', 'records[edit]']</code></pre>
+</div>
+</div>
+<p>Ok, that didn’t quite work. It got all of the headers, but only the last word of the header, and it really was quite clunky. Lets iteratively improve this. First, we can use <code>\w</code> to match any word character, which usually means alphanumeric (letters, numbers, regardless of case) plus underscore (_).</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">"[\w]{1,100}\[edit\]"</span>,wiki)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>['Overview[edit]', 'records[edit]', 'records[edit]']</code></pre>
+</div>
+</div>
+<p>This is something new. <code>\w</code> is a metacharacter, and indicates a special pattern of any letter or digit. There are actually a number of different metacharacters listed in the documentation. For instance, <code>\s</code> matches any whitespace character.</p>
+<p>Next, there are three other quantifiers we can use which shorten up the curly brace syntax. We can use an asterix * to match 0 or more times, so let’s try that.</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">"[\w]*\[edit\]"</span>,wiki)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>['Overview[edit]', 'records[edit]', 'records[edit]']</code></pre>
+</div>
+</div>
+<p>Now that we have shortened the regex, let’s improve it a little bit. We can add in a spaces using the space character:</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">"[\w ]*\[edit\]"</span>,wiki)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>['Overview[edit]',
+ 'Access to public records[edit]',
+ 'Student medical records[edit]']</code></pre>
+</div>
+</div>
+<p>Ok, so this gets us the list of section titles in the wikipedia page! You can now create a list of titles by iterating through this and applying another regex:</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> title <span class="kw">in</span> re.findall(<span class="st">'[\w ]*\[edit\]'</span>, wiki):</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">## Now we will take that intermediate result and split on the square bracket [ just taking the first result</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(re.split(<span class="st">'[\[]'</span>, title)[<span class="dv">0</span>])</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Overview
+Access to public records
+Student medical records
+</code></pre>
+</div>
+</div>
+</section>
+<section id="groups" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="groups"><span class="header-section-number">4.3</span> Groups</h2>
+<p>Ok, this works, but it’s a bit of a pain. To this point we have been talking about a regex as a single pattern which is matched. But, you can actually match different patterns, called groups, at the same time, and then refer to the groups you want.</p>
+<p><strong>To group patterns together you use parentheses</strong>, which is actually pretty natural. Lets rewrite our findall using groups</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'([\w ]*)(\[edit\])'</span>, wiki)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>[('Overview', '[edit]'),
+ ('Access to public records', '[edit]'),
+ ('Student medical records', '[edit]')]</code></pre>
+</div>
+</div>
+<p>Nice - we see that the python re module breaks out the result by group. We can actually refer to groups by number as well with the match objects that are returned. But, how do we get back a list of match objects?</p>
+<p>Thus far we’ve seen that findall() returns strings, and search() and match() return individual Match objects. But what do we do if we want a list of Match objects? In this case, we use the function <code>finditer()</code></p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> re.finditer(<span class="st">'([\w ]*)(\[edit\])'</span>, wiki):</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item.groups())</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('Overview', '[edit]')
+('Access to public records', '[edit]')
+('Student medical records', '[edit]')
+</code></pre>
+</div>
+</div>
+<p>We see here that the groups() method returns a tuple of the group. We can get an individual group using group(number), where group(0) is the whole match, and each other number is the portion of the match we are interested in.</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> re.finditer(<span class="st">'([\w ]*)(\[edit\])'</span>, wiki):</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item.group(<span class="dv">1</span>))</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Overview
+Access to public records
+Student medical records
+</code></pre>
+</div>
+</div>
+<p>One more piece to regex groups that I rarely use but is a good idea is labeling or naming groups.</p>
+<p>In the previous example I showed you how you can use the position of the group. But giving them a label and looking at the results as a dictionary is pretty useful.</p>
+<p>For that we use the syntax <code>(?P&lt;name&gt;)</code>, where :</p>
+<ul>
+<li>the parenthesis starts the group,</li>
+<li>the ?P indicates that this is an extension to basic regexes</li>
+<li><code>&lt;name&gt;</code> is the dictionary key we want to use wrapped in &lt;&gt;.</li>
+</ul>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> re.finditer(<span class="st">"(?P&lt;title&gt;[\w ]*)(?P&lt;edit_link&gt;\[edit\])"</span>,wiki):</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># We can get the dictionary returned for the item with .groupdict()</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item.groupdict()[<span class="st">'title'</span>])</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Overview
+Access to public records
+Student medical records
+</code></pre>
+</div>
+</div>
+<p>Of course, we can print out the whole dictionary for the item too, and see that the [edit] string is still in there. Here’s the dictionary kept for the last match:</p>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>item.groupdict()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>{'title': 'Student medical records', 'edit_link': '[edit]'}</code></pre>
+</div>
+</div>
+<p>Finally, there are a number of short hands which are used with regexes for different kinds of characters, including:</p>
+<ul>
+<li>a <code>.</code> for any single character which is not a newline</li>
+<li>a <code>\d</code> for any digit</li>
+<li>and <code>\s</code> for any whitespace character, like spaces and tabs</li>
+</ul>
+<p>There are more, and a full list can be found in the python documentation for regexes</p>
+</section>
+<section id="look-ahead-and-look-behind" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="look-ahead-and-look-behind"><span class="header-section-number">4.4</span> Look-ahead and Look-behind</h2>
+<p>One more concept to be familiar with is called “look ahead” and “look behind” matching. In this case, the pattern being given to the regex engine is for text either before or after the text we are trying to isolate.</p>
+<p>For example, in our headers we want to isolate text which comes before the [edit] rendering, but we actually don’t care about the [edit] text itself. Thus far we have been throwing the [edit] away, but if we want to use them to match but don’t want to capture them we could put them in a group and use <strong>look ahead</strong> instead with <code>?=</code> syntax:</p>
+<p>What the regex below says is match two groups, the first will be named and called title, will have any amount of whitespace or regular word characters, the second will be the characters [edit] but we don’t actually want this edit put in our output match objects:</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> re.finditer(<span class="st">'(?P&lt;title&gt;[\w ]+)(?=\[edit\])'</span>, wiki):</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;re.Match object; span=(0, 8), match='Overview'&gt;
+&lt;re.Match object; span=(2715, 2739), match='Access to public records'&gt;
+&lt;re.Match object; span=(3692, 3715), match='Student medical records'&gt;
+</code></pre>
+</div>
+</div>
+</section>
+<section id="example-wiki-data" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="example-wiki-data"><span class="header-section-number">4.5</span> Example wiki data:</h2>
+<p>Let’s look at some more wikipedia data. Here’s some data on universities in the US which are buddhist-based</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'../data/week1/buddhist.txt'</span>, <span class="st">'r'</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>    wiki <span class="op">=</span> <span class="bu">file</span>.read()</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="co">#wiki</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can see that each university follows a fairly similar pattern, with the name followed by an – then the words “located in” followed by the city and state.</p>
+<p>I’ll actually use this example to show you the verbose mode of python regexes. The <strong>verbose mode</strong> allows you to write multi-line regexes and increases readability. For this mode, we have to explicitly indicate all whitespace characters, either by prepending them with a <code>\</code> or by using the <code>\s</code> special value. However, this means we can write our regex a bit more like code, and can even include comments with #</p>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>pattern <span class="op">=</span> <span class="st">'''</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="st">(?P&lt;title&gt;.*)       # the uni title</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="st">(–\ located\ in\ )  # an indicator for the location</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="st">(?P&lt;city&gt;\w*)       #city the uni is in</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="st">(,\ )               #separator for the state</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="st">(?P&lt;state&gt;\w*)      #the state the uni is located in</span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a><span class="st">'''</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now when we call finditer() we just pass the re.VERBOSE flag as the last parameter, this makes it much easier to understand large regexes!</p>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> re.finditer(pattern, wiki, re.VERBOSE):</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item.groupdict())</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'title': 'Dhammakaya Open University ', 'city': 'Azusa', 'state': 'California'}
+{'title': 'Dharmakirti College ', 'city': 'Tucson', 'state': 'Arizona'}
+{'title': 'Dharma Realm Buddhist University ', 'city': 'Ukiah', 'state': 'California'}
+{'title': 'Ewam Buddhist Institute ', 'city': 'Arlee', 'state': 'Montana'}
+{'title': 'Institute of Buddhist Studies ', 'city': 'Berkeley', 'state': 'California'}
+{'title': 'Maitripa College ', 'city': 'Portland', 'state': 'Oregon'}
+{'title': 'University of the West ', 'city': 'Rosemead', 'state': 'California'}
+{'title': 'Won Institute of Graduate Studies ', 'city': 'Glenside', 'state': 'Pennsylvania'}
+</code></pre>
+</div>
+</div>
+</section>
+<section id="example-new-york-times-and-hashtags" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="example-new-york-times-and-hashtags"><span class="header-section-number">4.6</span> Example: New York Times and Hashtags</h2>
+<p>Here’s another example from the New York Times which covers health tweets on news items. This data came from the UC Irvine Machine Learning Repository which is a great source of different kinds of data</p>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"../data/week1/nytimeshealth.txt"</span>,<span class="st">"r"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># We'll read everything into a variable and take a look at it</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>    health<span class="op">=</span><span class="bu">file</span>.read()</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="co">#health</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code></code></pre>
+</div>
+</div>
+<pre><code>'548662191340421120|Sat Dec 27 02:10:34 +0000 2014|Risks in Using Social Media to Spot Signs of Mental Distress http://nyti.ms/1rqi9I1\n548579831169163265|Fri</code></pre>
+<p>So here we can see there are tweets with fields separated by pipes |.</p>
+<p>Lets try and get a list of all of the hashtags that are included in this data. A hashtag begins with a pound sign (or hash mark) and continues until some whitespace is found.</p>
+<p>So lets create a pattern. We want to include the hash sign first, then any number of alphanumeric characters. And we end when we see some whitespace</p>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>pattern <span class="op">=</span> <span class="st">'#[\w\d]*(?=\s)'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Notice that the ending is a look ahead. We’re not actually interested in matching whitespace in the return value. Also notice that I use an asterix * instead of the plus + for the matching of alphabetical characters or digits, because a + would require at least one of each</p>
+<p>Lets searching and display all of the hashtags:</p>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>re.findall(pattern, health)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>['#askwell',
+ '#pregnancy',
+ '#Colorado',
+ '#VegetarianThanksgiving',
+ '#FallPrevention',
+ '#Ebola',
+ '#Ebola',
+ '#ebola',
+ '#Ebola',
+ '#Ebola',
+ '#EbolaHysteria',
+ '#AskNYT',
+ '#Ebola',
+ '#Ebola',
+ '#Liberia',
+ '#Excalibur',
+ '#ebola',
+ '#Ebola',
+ '#dallas',
+ '#nobelprize2014',
+ '#ebola',
+ '#ebola',
+ '#monrovia',
+ '#ebola',
+ '#nobelprize2014',
+ '#ebola',
+ '#nobelprize2014',
+ '#Medicine',
+ '#Ebola',
+ '#Monrovia',
+ '#Ebola',
+ '#smell',
+ '#Ebola',
+ '#Ebola',
+ '#Ebola',
+ '#Monrovia',
+ '#Ebola',
+ '#ebola',
+ '#monrovia',
+ '#liberia',
+ '#benzos',
+ '#ClimateChange',
+ '#Whole',
+ '#Wheat',
+ '#Focaccia',
+ '#Tomatoes',
+ '#Olives',
+ '#Recipes',
+ '#Health',
+ '#Ebola',
+ '#Monrovia',
+ '#Liberia',
+ '#Ebola',
+ '#Ebola',
+ '#Liberia',
+ '#Ebola',
+ '#blood',
+ '#Ebola',
+ '#organtrafficking',
+ '#EbolaOutbreak',
+ '#SierraLeone',
+ '#Freetown',
+ '#SierraLeone',
+ '#ebolaoutbreak',
+ '#kenema',
+ '#ebola',
+ '#Ebola',
+ '#ebola',
+ '#ebola',
+ '#Ebola',
+ '#ASMR',
+ '#AIDS2014',
+ '#AIDS',
+ '#MH17',
+ '#benzos']</code></pre>
+</div>
+</div>
+</section>
+<section id="other" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="other"><span class="header-section-number">4.7</span> Other</h2>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../code/2_numpy.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Numpy</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

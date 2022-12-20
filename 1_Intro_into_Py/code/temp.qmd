@@ -1,0 +1,98 @@
+
+
+```{python}
+import numpy as np
+import re
+```
+
+
+```{python}
+import re
+string = 'bat, lat, mat, bet, let, met, bit, lit, mit, bot, lot, mot'
+result = re.findall('b[ao]t', string)
+print(result)
+```
+
+
+```{python}
+def l2_dist(a, b):
+    result = ((a - b) * (a - b)).sum()
+    result = result ** 0.5
+    return result 
+
+print('')
+```
+
+```{python}
+a = np.array(20,20)
+b = np.array(20,20)
+
+l2_dist(np.reshape(a, (20 * 20)), np.reshape(b, (20 * 20, 1)))
+```
+
+```{python}
+l2_dist(a, b)
+```
+
+```{python}
+a1 = np.random.rand(4)
+a2 = np.random.rand(4, 1)
+a3 = np.array([[1, 2, 3, 4]])
+a4 = np.arange(1, 4, 1)
+a5 = np.linspace(1 ,4, 4)
+
+a3.shape == a4.shape
+a5.shape == a1.shape
+
+```
+
+
+```{python}
+import numpy as np
+
+old = np.array([[1, 1, 1], [1, 1, 1]])
+new = old
+new[0, :2] = 0
+
+print(old)
+
+
+```
+
+```{python}
+import re 
+s = 'ACBCAC'
+
+re.findall('^AC', s)
+```
+
+
+```{python}
+import re
+s = 'ACAABAACAAAB'
+result = re.findall('A{1,2}', s)
+L = len(result)
+L
+```
+
+
+```{python}
+test = 'I refer to https://google.com and I never refer http://www.baidu.com if I have to search anything'
+
+re.findall('(?<=[https]:\/\/)([A-Za-z0-9.]*)', test)
+```
+
+```{python}
+text=r'''Everyone has the following fundamental freedoms:
+    (a) freedom of conscience and religion;
+    (b) freedom of thought, belief, opinion and expression, including freedom of the press and other media of communication;
+    (c) freedom of peaceful assembly; and
+    (d) freedom of association.'''
+
+import re
+pattern = '\(.\) '
+print(re.findall(pattern,text))
+
+print(len(re.findall(pattern,text)))
+```
+

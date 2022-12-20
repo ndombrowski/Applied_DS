@@ -10,7 +10,8 @@ book:
     - index.qmd
     - code/1_intro.qmd
     - code/2_numpy.qmd
-    - code/regular_expressions.qmd
+    - code/3_regular_expressions.qmd
+    - code/4_pandas.qmd
 
 format:
   html:
