@@ -1,0 +1,568 @@
+# Pandas 
+
+## Series data structure
+
+The series is one of the core data structures in pandas. You think of it a cross between a list and a dictionary. The items are all stored in an order and there's labels with which you can retrieve them. An easy way to visualize this is two columns of data. The first is the special index, a lot like keys in a dictionary. While the second is your actual data. It's important to note that the data column has a label of its own and can be retrieved using the `.name` attribute. This is different than with dictionaries and is useful when it comes to merging multiple columns of data. 
+
+```{python}
+import pandas as pd
+import numpy as np
+```
+
+You can create a series by passing in a list of values. When you do this, Pandas automatically assigns an index starting with zero and sets the name of the series to None. 
+One of the easiest ways to create a series is to use an array-like object, like a list. 
+
+```{python}
+students = ['Alice', 'Jack', 'Molly']
+```
+
+Now we just call the Series function in pandas and pass in the students:
+
+```{python}
+pd.Series(students)
+```
+The result is a Series object which is nicely rendered to the screen. 
+
+We see here that  the pandas has automatically identified the type of data in this Series as "object" and set the dytpe parameter as appropriate. We see that the values are indexed with integers, starting at zero.
+
+We don't have to use strings. If we passed in a list of whole numbers, for instance, we could see that panda sets the type to int64. Underneath panda stores series values in a  typed array using the Numpy library. This offers significant speedup when processing data  versus traditional python lists.
+
+```{python}
+numbers = [1,2,3]
+pd.Series(numbers)
+```
+
+And we see on my architecture that the result is a dtype of int64 objects
+
+## Missing data
+
+There's some other typing details that exist for performance that are important to know. The most important is how Numpy and thus pandas handle **missing data**. 
+
+In Python, we have the none type to indicate a lack of data. But what do we do if we want  to have a typed list like we do in the series object?
+
+Underneath, pandas does some type conversion. If we create a list of strings and we have  one element, a None type, pandas inserts it as a None and uses the type object for the underlying array. 
+
+```{python}
+students = ['Alice', 'Jack', None]
+pd.Series(students)
+```
+
+However, if we create a list of numbers, integers or floats, and put in the None type, pandas automatically converts this to a special floating point value designated as NaN, which stands for "Not a Number".
+
+```{python}
+numbers = [1,2,None]
+pd.Series(numbers)
+```
+
+You'll notice a couple of things:
+
+- First, NaN is a different value. 
+- Second, pandas set the dytpe of this series to floating point numbers instead of object or ints. That's maybe a bit of a surprise - why not just leave this as an integer?
+
+Underneath, pandas represents NaN as a floating point number, and because integers can be typecast to floats, pandas went and converted our integers to floats. So when you're wondering why the list of integers you put into a Series is not floats, it's probably because there is some missing data.
+
+It is important to stress that None and NaN might be being used by the data scientist in the same way, to denote missing data, but that underneath these are not represented by pandas in the same way.
+
+**NaN is *NOT* equivilent to None and when we try the equality test, the result is False.**
+
+```{python}
+np.nan == None
+```
+
+It turns out that you actually can't do an equality test of NAN to itself. When you do, the answer is always False. 
+
+```{python}
+np.nan == np.nan
+```
+
+Instead, you need to use special functions to test for the presence of not a number, such as the Numpy library `isnan()`.
+
+```{python}
+np.isnan(np.nan)
+```
+
+So keep in mind when you see NaN, it's meaning is similar to None, but it's a numeric value and treated differently for efficiency reasons.
+
+
+## Creating Series from dictionaries
+
+A series can be created directly from dictionary data. If you do this, the index is automatically assigned to the keys of the dictionary that you provided and not just incrementing integers.
+
+```{python}
+students_scores = {'Alice': 'Physics',
+                   'Jack': 'Chemistry',
+                   'Molly': 'English'}
+s = pd.Series(students_scores)
+s
+```
+We see that, since it was string data, pandas set the data type of the series to "object". We see that the index, the first column, is also a list of strings.
+
+Once the series has been created, we can get the index object using the index attribute.
+
+```{python}
+s.index
+```
+
+As you play more with pandas you'll notice that a lot of things are implemented as numpy arrays, and have the dtype value set. This is true of indicies, and here pandas inferred that we were using objects for the index.
+
+Now, this is kind of interesting. The dtype of object is not just for strings, but for arbitrary objects. Lets create a more complex type of data, say, a list of tuples.
+
+```{python}
+students = [("Alice","Brown"), ("Jack", "White"), ("Molly", "Green")]
+pd.Series(students)
+```
+We see that each of the tuples is stored in the series object, and the type is object.
+
+You can also separate your index creation from the data by passing in the index as a list explicitly to the series.
+
+```{python}
+s = pd.Series(['Physics', 'Chemistry', 'English'], index=['Alice', 'Jack', 'Molly'])
+s
+```
+
+So what happens if your list of values in the index object are not aligned with the keys in your dictionary for creating the series? Well, pandas overrides the automatic creation to favor only and all of the indices values that you provided. So it will ignore from your dictionary all keys which are not in your index, and pandas will add None or NaN type values for any index value you provide, which is not in your dictionary key list.
+
+```{python}
+students_scores = {'Alice': 'Physics',
+                   'Jack': 'Chemistry',
+                   'Molly': 'English'}
+
+# When I create the series object though I'll only ask for an index with three students, and I'll exclude Jack
+s = pd.Series(students_scores, index=['Alice', 'Molly', 'Sam'])
+s
+```
+
+## Querying a Series
+
+A pandas Series can be queried either by the index position or the index label. If you don't give an index to the series when querying, the position and the label are effectively the same values. 
+
+- To query by numeric location, starting at zero, use the `iloc` attribute. 
+- To query by the index label, you can use the `loc` attribute. 
+
+```{python}
+students_classes = {'Alice': 'Physics',
+                   'Jack': 'Chemistry',
+                   'Molly': 'English',
+                   'Sam': 'History'}
+
+s = pd.Series(students_classes)
+s
+```
+So, for this series, if you wanted to see the fourth entry we would we would use the iloc attribute with the parameter 3.
+
+```{python}
+s.iloc[3]
+```
+
+If you wanted to see what class Molly has, we would use the loc attribute with a parameter of Molly.
+
+```{python}
+s.loc['Molly']
+```
+
+Keep in mind that **iloc and loc are not methods, they are attributes**. So you don't use parentheses to query them, but square brackets instead, which is called the **indexing operator**. 
+
+Pandas tries to make our code a bit more readable and provides a sort of smart syntax using the indexing operator directly on the series itself. For instance, if you pass in an integer parameter, the operator will behave as if you want it to query via the iloc attribute
+
+```{python}
+s[3]
+```
+
+If you pass in an object, it will query as if you wanted to use the label based loc attribute.
+
+```{python}
+s['Molly']
+```
+
+So what happens if your index is a list of integers? This is a bit complicated and Pandas can't  determine automatically whether you're intending to query by index position or index label. So you need to be careful when using the indexing operator on the Series itself. The safer option is to be more explicit and use the iloc or loc attributes directly.
+
+```{python}
+class_code = {99: 'Physics',
+              100: 'Chemistry',
+              101: 'English',
+              102: 'History'}
+s = pd.Series(class_code)
+s
+```
+If we try and call `s[0]` we get a key error because there's no item in the classes list with an index of zero, instead we have to call iloc explicitly if we want the first item.
+
+```{python}
+#s[0]
+```
+
+The code above will give us a `KeyError: 0`
+
+```{python}
+s.iloc[0]
+```
+
+Now we know how to get data out of the series, let's talk about working with the data. A common task is to want to consider all of the values inside of a series and do some sort of  operation. This could be trying to find a certain number, or summarizing data or transforming the data in some way.
+
+A typical programmatic approach to this would be to iterate over all the items in the series, and invoke the operation one is interested in. For instance, we could create a Series of integers representing student grades, and just try and get an average grade
+
+```{python}
+grades = pd.Series([90, 80, 70, 60])
+grades
+```
+```{python}
+total = 0
+
+for grade in grades:
+    total += grade
+
+print(total/len(grades))
+```
+
+This works, but it's slow. Modern computers can do many tasks simultaneously, especially, but not only, tasks involving mathematics.
+
+Pandas and the underlying numpy libraries support a method of computation called **vectorization.** Vectorization works with most of the functions in the numpy library, including the sum function.
+
+```{python}
+total = np.sum(grades)
+print(total/len(grades))
+```
+
+Now both of these methods create the same value, but is one actually faster? The Jupyter Notebook has a magic function which can help.
+
+```{python}
+numbers = pd.Series(np.random.randint(0,1000,10000))
+
+#look at the first 5 items
+numbers.head()
+```
+```{python}
+#control length of series
+len(numbers)
+```
+
+Ok, we're confident now that we have a big series. The ipython interpreter has something called **magic functions** begin with a percentage sign. If we type this sign and then hit the Tab key, you can see a list of the available magic functions. You could write your own magic functions too, but that's a little bit outside of the scope of this course.
+
+Here, we're actually going to use what's called a **cellular magic function**. These start with two percentage signs and wrap the code in the current Jupyter cell. The function we're going to use is called `timeit`. This function will run our code a few times to determine, on average, how long it takes.
+
+Let's run timeit with our original iterative code. You can give timeit the number of loops that  you would like to run. By default, it is 1,000 loops. I'll ask timeit here to use 100 runs because we're recording this. Note that in order to use a cellular magic function, it has to be the first line in the cell
+
+```{python}
+%%timeit -n 100
+
+total = 0
+for number in numbers:
+    total += number
+
+total/len(numbers)
+```
+
+```{python}
+%%timeit -n 100
+total = np.sum(numbers)
+total/len(numbers)
+```
+
+This is a pretty shocking difference in the speed and demonstrates why one should be aware of parallel computing features and start thinking in functional programming terms. 
+
+Put more simply, vectorization is the ability for a computer to execute multiple instructions at once, and with high performance chips, especially graphics cards, you can get dramatic speedups. Modern graphics cards can run thousands of instructions in parallel.
+
+A Related feature in pandas and nummy is called **broadcasting.** With broadcasting, you can apply an operation to every value in the series, changing the series. For instance, if we wanted to increase every random variable by 2, we could do so quickly using the += operator directly on the Series object.
+
+```{python}
+numbers.head()
+```
+
+```{python}
+numbers += 2
+numbers.head()
+```
+The procedural way of doing this would be to iterate through all of the items in the series and increase the values directly. Pandas does support iterating through a series much like a dictionary, allowing you to unpack values easily.
+
+We can use the `iteritems()` function which returns a label and value 
+
+Pandas.iat(): allows to access a single value for a row/column pair by integer position.
+
+Selection with .at is nearly identical to .loc but it only selects a single 'cell' in your DataFrame/Series. We usually refer to this cell as a scalar value.
+
+- loc: label based, only works on index
+- iloc: position based
+- at: label based, gets scalar values. It's a very fast loc; Cannot operate on array indexers. Can assign new indices and columns
+- iat: position based, gets scalar values. It's a very fast iloc, Cannot work in array indexers. Cannot! assign new indices and columns.
+
+```{python}
+for label, value in numbers.iteritems():
+    # in the early version of pandas we would use the set_value() function
+    # in the current version, we use the iat() or at() functions,
+    numbers.iat[label] = value + 2
+    #numbers.iloc[label] = value + 2
+
+numbers.head()
+```
+
+Let's compare the speed:
+
+```{python}
+%%timeit -n 10
+
+# we'll create a blank new series of items to deal with
+s = pd.Series(np.random.randint(0,1000,1000))
+
+# And we'll just rewrite our loop from above.
+for label, value in s.iteritems():
+    s.loc[label]= value+2
+```
+
+```{python}
+%%timeit -n 10
+
+# We need to recreate a series
+s = pd.Series(np.random.randint(0,1000,1000))
+
+# And we just broadcast with +=
+s+=2
+```
+
+Not only is it significantly faster, but it's more concise and even easier to read too. The typical mathematical operations you would expect are vectorized, and the nump documentation outlines what it takes to create vectorized functions of your own
+
+One last note on using the indexing operators to access series data. **The .loc attribute lets you not only modify data in place, but also add new data as well((. If the value you pass in as the index doesn't exist, then a new entry is added. And keep in mind, indices can have mixed types.  While it's important to be aware of the typing going on underneath, Pandas will automatically  change the underlying NumPy types as appropriate.
+
+```{python}
+s = pd.Series([1, 2, 3])
+
+#add a new value
+s.loc['History'] = 102
+
+s
+```
+
+We see that mixed types for data values or index labels are no problem for Pandas. Since 
+"History" is not in the original list of indices, s.loc['History'] essentially creates a 
+new element in the series, with the index named "History", and the value of 102
+
+Up until now I've shown only examples of a series where the index values were unique. I want  to end this lecture by showing an example where index values are not unique, and this makes  pandas Series a little different conceptually then, for instance, a relational database.
+
+```{python}
+# Lets create a Series with students and the courses which they have taken
+students_classes = pd.Series({'Alice': 'Physics',
+                   'Jack': 'Chemistry',
+                   'Molly': 'English',
+                   'Sam': 'History'})
+students_classes
+```
+
+```{python}
+# Now lets create a Series just for some new student Kelly, which lists all of the courses she has taken.
+#We'll set the index to Kelly, and the data to be the names of courses.
+kelly_classes = pd.Series(['Philosophy', 'Arts', 'Math'], index=['Kelly', 'Kelly', 'Kelly'])
+kelly_classes
+```
+
+## Appending Series
+
+Finally, we can append all of the data in this new Series to the first using the `.append()` function.
+
+```{python}
+all_students_classes = students_classes.append(kelly_classes)
+all_students_classes
+```
+
+There are a couple of important considerations when using append. 
+
+- First, Pandas will take the series and try to infer the best data types to use. In this example, everything is a string, so there's no problems here. 
+- Second, the append method doesn't actually change the underlying Series objects, it instead returns a new series which is made up of the two appended together. This is a common pattern in pandas - by default returning a new object instead of modifying in place - and one you should come to expect. By printing the original series we can see that that series hasn't changed.
+
+```{python}
+students_classes
+```
+Finally, we see that when we query the appended series for Kelly, we don't get a single value, but a series itself. 
+
+```{python}
+all_students_classes['Kelly']
+```
+
+## Dataframes
+
+The DataFrame data structure is the heart of the Panda's library. It's a primary object that you'll be working with in data analysis and cleaning tasks.
+
+The DataFrame is conceptually a two-dimensional series object, where there's an index and multiple columns of content, with each column having a label. In fact, the distinction between a column and a row is really only a conceptual distinction. And you can think of the DataFrame itself as simply a two-axes labeled array.
+
+
+```{python}
+record1 = pd.Series({'Name': 'Alice',
+                        'Class': 'Physics',
+                        'Score': 85})
+record2 = pd.Series({'Name': 'Jack',
+                        'Class': 'Chemistry',
+                        'Score': 82})
+record3 = pd.Series({'Name': 'Helen',
+                        'Class': 'Biology',
+                        'Score': 90})
+```
+
+Like a Series, the DataFrame object is index. Here I'll use a group of series, where each series represents a row of data. Just like the Series function, we can pass in our individual items in an array, and we can pass in our index values as a second arguments
+
+```{python}
+df = pd.DataFrame([record1, record2, record3],
+    index = ['school1', 'school2', 'school3'])
+    
+df.head()
+```
+You'll notice here that Jupyter creates a nice bit of HTML to render the results of the dataframe. So we have the index, which is the leftmost column and is the school name, and then we have the rows of data, where each row has a column header which was given in our initial record dictionaries.
+
+An alternative method is that you could use a list of dictionaries, where each dictionary represents a row of data.
+
+
+```{python}
+students = [{'Name': 'Alice',
+              'Class': 'Physics',
+              'Score': 85},
+            {'Name': 'Jack',
+             'Class': 'Chemistry',
+             'Score': 82},
+            {'Name': 'Helen',
+             'Class': 'Biology',
+             'Score': 90}]
+
+# Then we pass this list of dictionaries into the DataFrame function
+df = pd.DataFrame(students, index=['school1', 'school2', 'school1'])
+# And lets print the head again
+df.head()
+```
+Similar to the series, we can extract data using the .iloc and .loc attributes. Because the  DataFrame is two-dimensional, passing a single value to the loc indexing operator will return the series if there's only one row to return.
+
+For instance, if we wanted to select data associated with school2, we would just query the .loc attribute with one parameter.
+
+```{python}
+df.loc['school2']
+```
+
+You'll note that the name of the series is returned as the index value, while the column 
+# name is included in the output. We can check the data type of the return using the python type function.
+
+```{python}
+type(df.loc['school2'])
+```
+
+It's important to remember that the indices and column names along either axes horizontal or  vertical, could be non-unique. In this example, we see two records for school1 as different rows.
+
+If we use a single value with the DataFrame lock attribute, multiple rows of the DataFrame will return, not as a new series, but as a new DataFrame.
+
+```{python}
+df.loc['school1']
+```
+
+```{python}
+# And we can see the the type of this is different too
+type(df.loc['school1'])
+```
+
+One of the powers of the Panda's DataFrame is that you can quickly select data based on multiple axes.For instance, if you wanted to just list the student names for school1, you would supply two parameters to .loc, one being the row index and the other being the column name.
+
+```{python}
+df.loc['school1', 'Name']
+```
+
+Remember, just like the Series, the pandas developers have implemented this using the indexing operator and not as parameters to a function.
+
+What would we do if we just wanted to select a single column though? Well, there are a few mechanisms. Firstly, we could transpose the matrix. This pivots all of the rows into columns and all of the columns into rows, and is done with the **T attribute**
+
+```{python}
+df.T
+```
+
+Then we can call .loc on the transpose to get the student names only
+
+```{python}
+df.T.loc['Name']
+```
+
+However, since iloc and loc are used for row selection, Panda reserves the indexing operator  directly on the DataFrame for column selection. In a Panda's DataFrame, columns always have a name. 
+
+So this selection is always label based, and is not as confusing as it was when using the square  bracket operator on the series objects. For those familiar with relational databases, this operator is analogous to column projection.
+
+```{python}
+df['Name']
+```
+In practice, this works really well since you're often trying to add or drop new columns. However, this also means that you get a key error if you try and use .loc with a column name:
+
+```{python}
+#df.loc['Name']
+```
+
+Note too that the result of a single column projection is a Series object
+
+```{python}
+type(df['Name'])
+```
+
+Since the result of using the indexing operator is either a DataFrame or Series, you can chain  operations together. For instance, we can select all of the rows which related to school1 using .loc, then project the name column from just those rows
+
+```{python}
+df.loc['school1']['Name']
+```
+
+If you get confused, use type to check the responses from resulting operations
+
+```{python}
+print(type(df.loc['school1'])) #should be a DataFrame
+print(type(df.loc['school1']['Name'])) #should be a Series
+```
+
+
+Chaining, by indexing on the return type of another index, can come with some costs and is best avoided if you can use another approach. In particular, chaining tends to cause Pandas to return a copy of the DataFrame instead of a view on the DataFrame. For selecting data, this is not a big deal, though it might be slower than necessary. If you are changing data though this is an important distinction and can be a source of error.
+
+Here's another approach. As we saw, .loc does row selection, and it can take two parameters, the row index and the list of column names. The .loc attribute also supports slicing.
+
+If we wanted to select all rows, we can use a colon to indicate a full slice from beginning to end. This is just like slicing characters in a list in python. Then we can add the column name as the second parameter as a string. If we wanted to include multiple columns, we could do so in a list. and Pandas will bring back only the columns we have asked for.
+
+```{python}
+df.loc[:,['Name', 'Score']]
+```
+
+Take a look at that again. The colon means that we want to get all of the rows, and the list in the second argument position is the list of columns we want to get back.
+
+That's selecting and projecting data from a DataFrame based on row and column labels. The key  concepts to remember are that the rows and columns are really just for our benefit. Underneath  this is just a two axes labeled array, and transposing the columns is easy. Also, consider the  issue of chaining carefully, and try to avoid it, as it can cause unpredictable results, where your intent was to obtain a view of the data, but instead Pandas returns to you a copy. 
+
+## Dropping data
+
+Before we leave the discussion of accessing data in DataFrames, lets talk about dropping data.
+
+It's easy to delete data in Series and DataFrames, and we can use the drop function to do so. This function takes a single parameter, which is the index or row label, to drop. This is another tricky place for new users -- the drop function doesn't change the DataFrame by default! Instead,the drop function returns to you a copy of the DataFrame with the given rows removed.
+
+```{python}
+df.drop('school1')
+```
+
+```{python}
+df
+```
+Drop has two interesting optional parameters:
+
+- The first is called inplace, and if it's  set to true, the DataFrame will be updated in place, instead of a copy being returned.  
+- The second parameter is the axes, which should be dropped. By default, this value is 0, indicating the row axis. But you could change it to 1 if you want to drop a column.
+
+For example, lets make a copy of a DataFrame using .copy():
+
+```{python}
+copy_df = df.copy()
+
+#drop the name column of the copy
+copy_df.drop('Name', inplace = True, axis = 1)
+copy_df
+```
+
+```{python}
+df
+```
+
+There is a second way to drop a column, and that's directly through the use of the indexing  operator, using the **del keyword**. This way of dropping data, however, takes immediate effect on the DataFrame and does not return a view.
+
+```{python}
+del copy_df['Class']
+copy_df
+```
+
+## Adding columns to a df
+
+Adding a new column to the DataFrame is as easy as assigning it to some value using the indexing operator. For instance, if we wanted to add a class ranking column with default  value of None, we could do so by using the assignment operator after the square brackets. This broadcasts the default value to the new column immediately.
+
+```{python}
+df['ClassRanking'] = None
+df
+```
+
