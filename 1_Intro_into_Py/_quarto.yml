@@ -12,7 +12,7 @@ book:
     - code/2_numpy.qmd
     - code/3_regular_expressions.qmd
     - code/4_pandas.qmd
-
+    - code/5_pandas2.qmd
 format:
   html:
     theme: cosmo

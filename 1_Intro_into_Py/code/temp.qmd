@@ -2,97 +2,63 @@
 
 ```{python}
 import numpy as np
+import pandas as pd
 import re
 ```
 
 
 ```{python}
-import re
-string = 'bat, lat, mat, bet, let, met, bit, lit, mit, bot, lot, mot'
-result = re.findall('b[ao]t', string)
-print(result)
+import pandas as pd
+sdata = {'Ohio': 35000, 'Texas': 71000, 'Oregon': 16000, 'Utah': 5000}
+obj1 = pd.Series(sdata)
+states = ['California', 'Ohio', 'Oregon', 'Texas']
+obj2 = pd.Series(sdata, index=states)
+obj3 = pd.isnull(obj2)
 ```
 
 
 ```{python}
-def l2_dist(a, b):
-    result = ((a - b) * (a - b)).sum()
-    result = result ** 0.5
-    return result 
-
-print('')
-```
-
-```{python}
-a = np.array(20,20)
-b = np.array(20,20)
-
-l2_dist(np.reshape(a, (20 * 20)), np.reshape(b, (20 * 20, 1)))
-```
-
-```{python}
-l2_dist(a, b)
-```
-
-```{python}
-a1 = np.random.rand(4)
-a2 = np.random.rand(4, 1)
-a3 = np.array([[1, 2, 3, 4]])
-a4 = np.arange(1, 4, 1)
-a5 = np.linspace(1 ,4, 4)
-
-a3.shape == a4.shape
-a5.shape == a1.shape
-
+import math
+obj2['California'] == None
 ```
 
 
 ```{python}
-import numpy as np
-
-old = np.array([[1, 1, 1], [1, 1, 1]])
-new = old
-new[0, :2] = 0
-
-print(old)
-
-
-```
-
-```{python}
-import re 
-s = 'ACBCAC'
-
-re.findall('^AC', s)
+import pandas as pd
+d = {'1': 'Alice','2': 'Bob','3': 'Rita','4': 'Molly','5': 'Ryan'}
+S = pd.Series(d)
+S
 ```
 
 
 ```{python}
-import re
-s = 'ACAABAACAAAB'
-result = re.findall('A{1,2}', s)
-L = len(result)
-L
+S.iloc[0:3]
 ```
+
+
+df.rename(mapper = lambda x: x.upper(), axis = 1)
 
 
 ```{python}
-test = 'I refer to https://google.com and I never refer http://www.baidu.com if I have to search anything'
+import pandas as pd
+s1 = pd.Series({1: 'Alice', 2: 'Jack', 3: 'Molly'})
+s2 = pd.Series({'Alice': 1, 'Jack': 2, 'Molly': 3})
 
-re.findall('(?<=[https]:\/\/)([A-Za-z0-9.]*)', test)
 ```
 
 ```{python}
-text=r'''Everyone has the following fundamental freedoms:
-    (a) freedom of conscience and religion;
-    (b) freedom of thought, belief, opinion and expression, including freedom of the press and other media of communication;
-    (c) freedom of peaceful assembly; and
-    (d) freedom of association.'''
-
-import re
-pattern = '\(.\) '
-print(re.findall(pattern,text))
-
-print(len(re.findall(pattern,text)))
+#s2.loc[1]
+s1[2]
 ```
 
+
+Question 8
+Which of the following statements is incorrect?
+
+Qst 9
+
+For the given DataFrame df shown above, we want to get all records with a toefl score greater than 105 but smaller than 115. Which of the following expressions is incorrect to perform the same?
+
+Qst 10:
+
+Which of the following is the correct way to extract all information related to the student named Alice from the DataFrame df given below:
