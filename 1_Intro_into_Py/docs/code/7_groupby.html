@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Applied Data Science Course 1 - 8&nbsp; Grouping data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../code/8_scales.html" rel="next">
+<link href="../code/6_idioms.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Grouping data</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Applied Data Science Course 1</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Data Science in Python</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/1_intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction into python</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/2_numpy.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Numpy</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/3_regular_expressions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regex</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/4_pandas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pandas</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/5_pandas2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data processing with pandas</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/6_idioms.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Panda idioms</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/7_groupby.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Grouping data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/8_scales.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Scales</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/9_pivot.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Pivot tables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/10_date_and_time.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Dates and times</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#grouping-multiple-columns" id="toc-grouping-multiple-columns" class="nav-link active" data-scroll-target="#grouping-multiple-columns"><span class="toc-section-number">8.1</span>  Grouping multiple columns</a></li>
+  <li><a href="#aggregation-and-.agg" id="toc-aggregation-and-.agg" class="nav-link" data-scroll-target="#aggregation-and-.agg"><span class="toc-section-number">8.2</span>  Aggregation and .agg()</a></li>
+  <li><a href="#transformation" id="toc-transformation" class="nav-link" data-scroll-target="#transformation"><span class="toc-section-number">8.3</span>  Transformation</a></li>
+  <li><a href="#filtering" id="toc-filtering" class="nav-link" data-scroll-target="#filtering"><span class="toc-section-number">8.4</span>  Filtering</a></li>
+  <li><a href="#applying" id="toc-applying" class="nav-link" data-scroll-target="#applying"><span class="toc-section-number">8.5</span>  Applying</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Grouping data</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Sometimes we want to select data based on groups and understand aggregated data on a group level. We have seen that even though Pandas allows us to iterate over every row in a dataframe, it is generally very slow to do so. Fortunately Pandas has a groupby() function to speed up such task.</p>
+<p>The idea behind the groupby() function is that it takes some dataframe, splits it into chunks based on some key values, applies computation on those chunks, then combines the results back together into another dataframe. In pandas this is referred to as the split-apply-combine pattern.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s prepare some data to work with:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#read in census data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'../data/week3/census.csv'</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#remove state level data</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[df[<span class="st">'SUMLEV'</span>] <span class="op">==</span><span class="dv">50</span> ]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#view df</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>SUMLEV</th>
+      <th>REGION</th>
+      <th>DIVISION</th>
+      <th>STATE</th>
+      <th>COUNTY</th>
+      <th>STNAME</th>
+      <th>CTYNAME</th>
+      <th>CENSUS2010POP</th>
+      <th>ESTIMATESBASE2010</th>
+      <th>POPESTIMATE2010</th>
+      <th>...</th>
+      <th>RDOMESTICMIG2011</th>
+      <th>RDOMESTICMIG2012</th>
+      <th>RDOMESTICMIG2013</th>
+      <th>RDOMESTICMIG2014</th>
+      <th>RDOMESTICMIG2015</th>
+      <th>RNETMIG2011</th>
+      <th>RNETMIG2012</th>
+      <th>RNETMIG2013</th>
+      <th>RNETMIG2014</th>
+      <th>RNETMIG2015</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>50</td>
+      <td>3</td>
+      <td>6</td>
+      <td>1</td>
+      <td>1</td>
+      <td>Alabama</td>
+      <td>Autauga County</td>
+      <td>54571</td>
+      <td>54571</td>
+      <td>54660</td>
+      <td>...</td>
+      <td>7.242091</td>
+      <td>-2.915927</td>
+      <td>-3.012349</td>
+      <td>2.265971</td>
+      <td>-2.530799</td>
+      <td>7.606016</td>
+      <td>-2.626146</td>
+      <td>-2.722002</td>
+      <td>2.592270</td>
+      <td>-2.187333</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>50</td>
+      <td>3</td>
+      <td>6</td>
+      <td>1</td>
+      <td>3</td>
+      <td>Alabama</td>
+      <td>Baldwin County</td>
+      <td>182265</td>
+      <td>182265</td>
+      <td>183193</td>
+      <td>...</td>
+      <td>14.832960</td>
+      <td>17.647293</td>
+      <td>21.845705</td>
+      <td>19.243287</td>
+      <td>17.197872</td>
+      <td>15.844176</td>
+      <td>18.559627</td>
+      <td>22.727626</td>
+      <td>20.317142</td>
+      <td>18.293499</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>50</td>
+      <td>3</td>
+      <td>6</td>
+      <td>1</td>
+      <td>5</td>
+      <td>Alabama</td>
+      <td>Barbour County</td>
+      <td>27457</td>
+      <td>27457</td>
+      <td>27341</td>
+      <td>...</td>
+      <td>-4.728132</td>
+      <td>-2.500690</td>
+      <td>-7.056824</td>
+      <td>-3.904217</td>
+      <td>-10.543299</td>
+      <td>-4.874741</td>
+      <td>-2.758113</td>
+      <td>-7.167664</td>
+      <td>-3.978583</td>
+      <td>-10.543299</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>50</td>
+      <td>3</td>
+      <td>6</td>
+      <td>1</td>
+      <td>7</td>
+      <td>Alabama</td>
+      <td>Bibb County</td>
+      <td>22915</td>
+      <td>22919</td>
+      <td>22861</td>
+      <td>...</td>
+      <td>-5.527043</td>
+      <td>-5.068871</td>
+      <td>-6.201001</td>
+      <td>-0.177537</td>
+      <td>0.177258</td>
+      <td>-5.088389</td>
+      <td>-4.363636</td>
+      <td>-5.403729</td>
+      <td>0.754533</td>
+      <td>1.107861</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>50</td>
+      <td>3</td>
+      <td>6</td>
+      <td>1</td>
+      <td>9</td>
+      <td>Alabama</td>
+      <td>Blount County</td>
+      <td>57322</td>
+      <td>57322</td>
+      <td>57373</td>
+      <td>...</td>
+      <td>1.807375</td>
+      <td>-1.177622</td>
+      <td>-1.748766</td>
+      <td>-2.062535</td>
+      <td>-1.369970</td>
+      <td>1.859511</td>
+      <td>-0.848580</td>
+      <td>-1.402476</td>
+      <td>-1.577232</td>
+      <td>-0.884411</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 100 columns</p>
+</div>
+</div>
+</div>
+<p>In the first example for groupby() I want to use the census date. Let’s get a list of the unique states, then we can iterate over all the states and for each state we reduce the data frame and calculate the average.</p>
+<p>Let’s run such task for 3 times and time it. For this we’ll use the cell magic function %%timeit:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#%%timeit -n 3</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> state <span class="kw">in</span> df[<span class="st">'STNAME'</span>]:</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    calculate the average using np</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    avg <span class="op">=</span> np.average(df.where(df[<span class="st">'STNAME'</span>]<span class="op">==</span>state).dropna()[<span class="st">'CENSUS2010POP'</span>])</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Countries in state'</span> <span class="op">+</span> state <span class="op">+</span> <span class="st">' have an avg pop of:'</span> <span class="op">+</span> <span class="bu">str</span>(avg))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you scroll down to the bottom of that output you can see it takes a fair bit of time to finish. I.e. in the jupyter notebook it takes 1.07s per loop. Now let’s try another approach using groupby().</p>
+<p>You’ll notice there are two values we set here. groupby() returns a tuple, where: - the first value is the value of the key we were trying to group by, in this case a specific state name - the second one is projected dataframe that was found for that group</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#%%timeit -n 3</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># For this method, we start by telling pandas we're interested in grouping by state name, this is the "split":</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> group, frame <span class="kw">in</span> df.groupby(<span class="st">'STNAME'</span>):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Now we include our logic in the "apply" step, which is to calculate an average of the census2010pop</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        avg <span class="op">=</span> np.average(frame[<span class="st">'CENSUS2010POP'</span>])</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'Counties in state '</span> <span class="op">+</span> group <span class="op">+</span> </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>          <span class="st">' have an average population of '</span> <span class="op">+</span> <span class="bu">str</span>(avg))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This one would take 4.71 m to run in jupyter.</p>
+<section id="grouping-multiple-columns" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="grouping-multiple-columns"><span class="header-section-number">8.1</span> Grouping multiple columns</h2>
+<p>Now, 99% of the time, you’ll use group by on one or more columns. But you can also provide a function to group by and use that to segment your data.</p>
+<p>This is a bit of a fabricated example but lets say that you have a big batch job with lots of processing and you want to work on only a third or so of the states at a given time. We could create some function which returns a number between zero and two based on the first character of the state name. Then we can tell group by to use this function to split up our data frame.</p>
+<p>It’s important to note that in order to do this you need to set the index of the data frame to be the column that you want to group by first.</p>
+<p>We’ll create some new function called set_batch_number and if the first letter of the parameter is a capital M we’ll return a 0. If it’s a capital Q we’ll return a 1 and otherwise we’ll return a 2. Then we’ll pass this function to the data frame:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.set_index(<span class="st">'STNAME'</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> set_batch_number(item):</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> item[<span class="dv">0</span>] <span class="op">&lt;</span> <span class="st">'M'</span>:</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> item[<span class="dv">0</span>] <span class="op">&lt;</span> <span class="st">'Q'</span>:</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The dataframe is supposed to be grouped by according to the batch number And we will loop through each batch group:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> group, frame <span class="kw">in</span> df.groupby(set_batch_number):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'There are '</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">len</span>(frame)) <span class="op">+</span> <span class="st">' records in group '</span> <span class="op">+</span> <span class="bu">str</span>(group) <span class="op">+</span> <span class="st">' for processing.'</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 1177 records in group 0 for processing.
+There are 1134 records in group 1 for processing.
+There are 831 records in group 2 for processing.
+</code></pre>
+</div>
+</div>
+<p>Notice that this time I didn’t pass in a column name to groupby(). Instead, I set the index of the dataframe to be STNAME, and if <strong>no column identifier is passed groupby() will automatically use the index</strong>.</p>
+<p>Let’s take one more look at an example of how we might group data. In this example, I want to use a dataset of housing from airbnb. In this dataset there are two columns of interest, one is the cancellation_policy and the other is the review_scores_value:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'../data/week3/listings.csv'</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>id</th>
+      <th>listing_url</th>
+      <th>scrape_id</th>
+      <th>last_scraped</th>
+      <th>name</th>
+      <th>summary</th>
+      <th>space</th>
+      <th>description</th>
+      <th>experiences_offered</th>
+      <th>neighborhood_overview</th>
+      <th>...</th>
+      <th>review_scores_value</th>
+      <th>requires_license</th>
+      <th>license</th>
+      <th>jurisdiction_names</th>
+      <th>instant_bookable</th>
+      <th>cancellation_policy</th>
+      <th>require_guest_profile_picture</th>
+      <th>require_guest_phone_verification</th>
+      <th>calculated_host_listings_count</th>
+      <th>reviews_per_month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>12147973</td>
+      <td>https://www.airbnb.com/rooms/12147973</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Sunny Bungalow in the City</td>
+      <td>Cozy, sunny, family home.  Master bedroom high...</td>
+      <td>The house has an open and cozy feel at the sam...</td>
+      <td>Cozy, sunny, family home.  Master bedroom high...</td>
+      <td>none</td>
+      <td>Roslindale is quiet, convenient and friendly. ...</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>moderate</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3075044</td>
+      <td>https://www.airbnb.com/rooms/3075044</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Charming room in pet friendly apt</td>
+      <td>Charming and quiet room in a second floor 1910...</td>
+      <td>Small but cozy and quite room with a full size...</td>
+      <td>Charming and quiet room in a second floor 1910...</td>
+      <td>none</td>
+      <td>The room is in Roslindale, a diverse and prima...</td>
+      <td>...</td>
+      <td>9.0</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>t</td>
+      <td>moderate</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>1.30</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6976</td>
+      <td>https://www.airbnb.com/rooms/6976</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Mexican Folk Art Haven in Boston</td>
+      <td>Come stay with a friendly, middle-aged guy in ...</td>
+      <td>Come stay with a friendly, middle-aged guy in ...</td>
+      <td>Come stay with a friendly, middle-aged guy in ...</td>
+      <td>none</td>
+      <td>The LOCATION: Roslindale is a safe and diverse...</td>
+      <td>...</td>
+      <td>10.0</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>moderate</td>
+      <td>t</td>
+      <td>f</td>
+      <td>1</td>
+      <td>0.47</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1436513</td>
+      <td>https://www.airbnb.com/rooms/1436513</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Spacious Sunny Bedroom Suite in Historic Home</td>
+      <td>Come experience the comforts of home away from...</td>
+      <td>Most places you find in Boston are small howev...</td>
+      <td>Come experience the comforts of home away from...</td>
+      <td>none</td>
+      <td>Roslindale is a lovely little neighborhood loc...</td>
+      <td>...</td>
+      <td>10.0</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>moderate</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7651065</td>
+      <td>https://www.airbnb.com/rooms/7651065</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Come Home to Boston</td>
+      <td>My comfy, clean and relaxing home is one block...</td>
+      <td>Clean, attractive, private room, one block fro...</td>
+      <td>My comfy, clean and relaxing home is one block...</td>
+      <td>none</td>
+      <td>I love the proximity to downtown, the neighbor...</td>
+      <td>...</td>
+      <td>10.0</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>flexible</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>2.25</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 95 columns</p>
+</div>
+</div>
+</div>
+<p>So, how would I group by both of these columns? A first approach might be to promote them to a multiindex and just call groupby().</p>
+<p>When we have a multiindex we need to pass in the levels we are interested in grouping by:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.set_index([<span class="st">'cancellation_policy'</span>, <span class="st">'review_scores_value'</span>])</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> group, frame <span class="kw">in</span> df.groupby(level<span class="op">=</span>(<span class="dv">0</span>,<span class="dv">1</span>)):</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(group)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('flexible', 2.0)
+('flexible', 4.0)
+('flexible', 5.0)
+('flexible', 6.0)
+('flexible', 7.0)
+('flexible', 8.0)
+('flexible', 9.0)
+('flexible', 10.0)
+('moderate', 2.0)
+('moderate', 4.0)
+('moderate', 6.0)
+('moderate', 7.0)
+('moderate', 8.0)
+('moderate', 9.0)
+('moderate', 10.0)
+('strict', 2.0)
+('strict', 3.0)
+('strict', 4.0)
+('strict', 5.0)
+('strict', 6.0)
+('strict', 7.0)
+('strict', 8.0)
+('strict', 9.0)
+('strict', 10.0)
+('super_strict_30', 6.0)
+('super_strict_30', 7.0)
+('super_strict_30', 8.0)
+('super_strict_30', 9.0)
+('super_strict_30', 10.0)
+</code></pre>
+</div>
+</div>
+<p>What if we wanted to group by the cancelation policy and review scores, but separate out all the 10’s from those under ten? In this case, we could use a function to manage the groupings.</p>
+<p>In this function, we want to check the “review_scores_value” portion of the index. item is in the tuple format: (cancellation_policy,review_scores_value):</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> grouping_fun(item):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> item[<span class="dv">1</span>] <span class="op">==</span> <span class="fl">10.0</span>:</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (item[<span class="dv">0</span>], <span class="st">"10.0"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (item[<span class="dv">0</span>], <span class="st">"not 10.0"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> group, frame <span class="kw">in</span> df.groupby(by<span class="op">=</span>grouping_fun):</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(group)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('flexible', '10.0')
+('flexible', 'not 10.0')
+('moderate', '10.0')
+('moderate', 'not 10.0')
+('strict', '10.0')
+('strict', 'not 10.0')
+('super_strict_30', '10.0')
+('super_strict_30', 'not 10.0')
+</code></pre>
+</div>
+</div>
+</section>
+<section id="aggregation-and-.agg" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="aggregation-and-.agg"><span class="header-section-number">8.2</span> Aggregation and .agg()</h2>
+<p>To this point we have applied very simple processing to our data after splitting, really just outputting some print statements to demonstrate how the splitting works. The pandas developers have three broad categories of data processing to happen during the apply step:</p>
+<ul>
+<li>Aggregation of group data</li>
+<li>Transformation of group data</li>
+<li>Filtration of group data</li>
+</ul>
+<p>The most straight forward apply step is the aggregation of data, and uses the method <strong>agg()</strong> on the groupby object. The agg() method allows you to apply a function or a list of function names to be executed along one of the axis of the DataFrame, default 0, which is the index (row) axis.</p>
+<p>Thus far we have only iterated through the groupby object, unpacking it into a label (the group name) and a dataframe. But with agg we can pass in a dictionary of the columns we are interested in aggregating along with the function we are looking to apply to aggregate.</p>
+<p>Let’s reset the index for our airbnb data:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.reset_index()</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#group by cancellation policy and find the avg review scores</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">'cancellation_policy'</span>).agg({<span class="st">'review_scores_value'</span> : np.average})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>review_scores_value</th>
+    </tr>
+    <tr>
+      <th>cancellation_policy</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>flexible</th>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>moderate</th>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>strict</th>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>super_strict_30</th>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>That didn’t seem to work at all. Just a bunch of not a numbers. The issue is actually in the function that we sent to aggregate. np.average does not ignore nans! However, there is a function we can use for this:</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">'cancellation_policy'</span>).agg({<span class="st">'review_scores_value'</span>: np.nanmean})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>review_scores_value</th>
+    </tr>
+    <tr>
+      <th>cancellation_policy</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>flexible</th>
+      <td>9.237421</td>
+    </tr>
+    <tr>
+      <th>moderate</th>
+      <td>9.307398</td>
+    </tr>
+    <tr>
+      <th>strict</th>
+      <td>9.081441</td>
+    </tr>
+    <tr>
+      <th>super_strict_30</th>
+      <td>8.537313</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>We can just extend this dictionary to aggregate by multiple functions or multiple columns.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">'cancellation_policy'</span>).agg({<span class="st">'review_scores_value'</span>: (np.nanmean, np.nanstd),</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="st">'reviews_per_month'</span> : np.nanmean})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="2" halign="left">review_scores_value</th>
+      <th>reviews_per_month</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>nanmean</th>
+      <th>nanstd</th>
+      <th>nanmean</th>
+    </tr>
+    <tr>
+      <th>cancellation_policy</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>flexible</th>
+      <td>9.237421</td>
+      <td>1.096271</td>
+      <td>1.829210</td>
+    </tr>
+    <tr>
+      <th>moderate</th>
+      <td>9.307398</td>
+      <td>0.859859</td>
+      <td>2.391922</td>
+    </tr>
+    <tr>
+      <th>strict</th>
+      <td>9.081441</td>
+      <td>1.040531</td>
+      <td>1.873467</td>
+    </tr>
+    <tr>
+      <th>super_strict_30</th>
+      <td>8.537313</td>
+      <td>0.840785</td>
+      <td>0.340143</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<ul>
+<li>First we’re doing a group by on the dataframe object by the column “cancellation_policy”. This creates a new GroupBy object.</li>
+<li>Then we are invoking the agg() function on that object. The agg function is going to apply one or more functions we specify to the group dataframes and return a single row per dataframe/group.</li>
+<li>When we called this function we sent it two dictionary entries, each with the key indicating which column we wanted functions applied to.</li>
+<li>For the first column we actually supplied a tuple of two functions. Note that these are not function invocations, like np.nanmean(), or function names, like “nanmean” they are references to functions which will return single values. The group by object will recognize the tuple and call each function in order on the same column.</li>
+<li>The results will be in a hierarchical index, but since they are columns they don’t show as an index per se. Then we indicated another column and a single function we wanted to run.</li>
+</ul>
+</section>
+<section id="transformation" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="transformation"><span class="header-section-number">8.3</span> Transformation</h2>
+<p>Transformation is different from aggregation.</p>
+<p>Where agg() returns a single value per column, so one row per group, <strong>transform()</strong> returns an object that is the same size as the group.</p>
+<p>Essentially, it broadcasts the function you supply over the grouped dataframe, returning a new dataframe. This makes combining data later easy.</p>
+<p>For instance, suppose we want to include the average rating values in a given group by cancellation policy, but preserve the dataframe shape so that we could generate a difference between an individual observation and the sum.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#define what columns we are interested in</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">'cancellation_policy'</span>, <span class="st">'review_scores_value'</span>]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#transform the data and store it in a new df</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>transform_df <span class="op">=</span> df[cols].groupby(<span class="st">'cancellation_policy'</span>).transform(np.nanmean)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>transform_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>review_scores_value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>9.307398</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>9.307398</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9.307398</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>9.307398</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>9.237421</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>So we can see that the index here is actually the same as the original dataframe. So lets just join this in. Before we do that, lets rename the column in the transformed version:</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>transform_df.rename({<span class="st">'review_scores_value'</span>:<span class="st">'mean_review_scores'</span>}, axis <span class="op">=</span> <span class="st">'columns'</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.merge(transform_df, left_index <span class="op">=</span> <span class="va">True</span>, right_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>cancellation_policy</th>
+      <th>review_scores_value</th>
+      <th>id</th>
+      <th>listing_url</th>
+      <th>scrape_id</th>
+      <th>last_scraped</th>
+      <th>name</th>
+      <th>summary</th>
+      <th>space</th>
+      <th>description</th>
+      <th>...</th>
+      <th>review_scores_location</th>
+      <th>requires_license</th>
+      <th>license</th>
+      <th>jurisdiction_names</th>
+      <th>instant_bookable</th>
+      <th>require_guest_profile_picture</th>
+      <th>require_guest_phone_verification</th>
+      <th>calculated_host_listings_count</th>
+      <th>reviews_per_month</th>
+      <th>mean_review_scores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>moderate</td>
+      <td>NaN</td>
+      <td>12147973</td>
+      <td>https://www.airbnb.com/rooms/12147973</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Sunny Bungalow in the City</td>
+      <td>Cozy, sunny, family home.  Master bedroom high...</td>
+      <td>The house has an open and cozy feel at the sam...</td>
+      <td>Cozy, sunny, family home.  Master bedroom high...</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>9.307398</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>moderate</td>
+      <td>9.0</td>
+      <td>3075044</td>
+      <td>https://www.airbnb.com/rooms/3075044</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Charming room in pet friendly apt</td>
+      <td>Charming and quiet room in a second floor 1910...</td>
+      <td>Small but cozy and quite room with a full size...</td>
+      <td>Charming and quiet room in a second floor 1910...</td>
+      <td>...</td>
+      <td>9.0</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>t</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>1.30</td>
+      <td>9.307398</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>moderate</td>
+      <td>10.0</td>
+      <td>6976</td>
+      <td>https://www.airbnb.com/rooms/6976</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Mexican Folk Art Haven in Boston</td>
+      <td>Come stay with a friendly, middle-aged guy in ...</td>
+      <td>Come stay with a friendly, middle-aged guy in ...</td>
+      <td>Come stay with a friendly, middle-aged guy in ...</td>
+      <td>...</td>
+      <td>9.0</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>t</td>
+      <td>f</td>
+      <td>1</td>
+      <td>0.47</td>
+      <td>9.307398</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>moderate</td>
+      <td>10.0</td>
+      <td>1436513</td>
+      <td>https://www.airbnb.com/rooms/1436513</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Spacious Sunny Bedroom Suite in Historic Home</td>
+      <td>Come experience the comforts of home away from...</td>
+      <td>Most places you find in Boston are small howev...</td>
+      <td>Come experience the comforts of home away from...</td>
+      <td>...</td>
+      <td>10.0</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>1.00</td>
+      <td>9.307398</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>flexible</td>
+      <td>10.0</td>
+      <td>7651065</td>
+      <td>https://www.airbnb.com/rooms/7651065</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Come Home to Boston</td>
+      <td>My comfy, clean and relaxing home is one block...</td>
+      <td>Clean, attractive, private room, one block fro...</td>
+      <td>My comfy, clean and relaxing home is one block...</td>
+      <td>...</td>
+      <td>9.0</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>2.25</td>
+      <td>9.237421</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 96 columns</p>
+</div>
+</div>
+</div>
+<p>Great, we can see that our new column is in place, the mean_review_scores. So now we could create, for instance, the difference between a given row and it’s group (the cancellation policy) means:</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'mean_dff'</span>] <span class="op">=</span> np.absolute(df[<span class="st">'review_scores_value'</span>] <span class="op">-</span> df[<span class="st">'mean_review_scores'</span>])</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'mean_dff'</span>].head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>0         NaN
+1    0.307398
+2    0.692602
+3    0.692602
+4    0.762579
+Name: mean_dff, dtype: float64</code></pre>
+</div>
+</div>
+<p>Numpy absolute value calculates the absolute value of the values in a Numpy array. The absolute value (or modulus) | x | of a real number x is the non-negative value of x without regard to its sign.</p>
+</section>
+<section id="filtering" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="filtering"><span class="header-section-number">8.4</span> Filtering</h2>
+<p>The GroupBy object has build in support for filtering groups as well. It’s often that you’ll want to group by some feature, then make some transformation to the groups, then drop certain groups as part of your cleaning routines.</p>
+<p>The filter() function takes in a function which it applies to each group dataframe and returns either a True or a False, depending upon whether that group should be included in the results.</p>
+<p>For instance, if we only want those groups which have a mean rating above 9 included in our results:</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">'cancellation_policy'</span>).<span class="bu">filter</span>(<span class="kw">lambda</span> x: np.nanmean(x[<span class="st">'review_scores_value'</span>]) <span class="op">&gt;</span> <span class="fl">9.2</span>).head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>cancellation_policy</th>
+      <th>review_scores_value</th>
+      <th>id</th>
+      <th>listing_url</th>
+      <th>scrape_id</th>
+      <th>last_scraped</th>
+      <th>name</th>
+      <th>summary</th>
+      <th>space</th>
+      <th>description</th>
+      <th>...</th>
+      <th>requires_license</th>
+      <th>license</th>
+      <th>jurisdiction_names</th>
+      <th>instant_bookable</th>
+      <th>require_guest_profile_picture</th>
+      <th>require_guest_phone_verification</th>
+      <th>calculated_host_listings_count</th>
+      <th>reviews_per_month</th>
+      <th>mean_review_scores</th>
+      <th>mean_dff</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>moderate</td>
+      <td>NaN</td>
+      <td>12147973</td>
+      <td>https://www.airbnb.com/rooms/12147973</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Sunny Bungalow in the City</td>
+      <td>Cozy, sunny, family home.  Master bedroom high...</td>
+      <td>The house has an open and cozy feel at the sam...</td>
+      <td>Cozy, sunny, family home.  Master bedroom high...</td>
+      <td>...</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>9.307398</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>moderate</td>
+      <td>9.0</td>
+      <td>3075044</td>
+      <td>https://www.airbnb.com/rooms/3075044</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Charming room in pet friendly apt</td>
+      <td>Charming and quiet room in a second floor 1910...</td>
+      <td>Small but cozy and quite room with a full size...</td>
+      <td>Charming and quiet room in a second floor 1910...</td>
+      <td>...</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>t</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>1.30</td>
+      <td>9.307398</td>
+      <td>0.307398</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>moderate</td>
+      <td>10.0</td>
+      <td>6976</td>
+      <td>https://www.airbnb.com/rooms/6976</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Mexican Folk Art Haven in Boston</td>
+      <td>Come stay with a friendly, middle-aged guy in ...</td>
+      <td>Come stay with a friendly, middle-aged guy in ...</td>
+      <td>Come stay with a friendly, middle-aged guy in ...</td>
+      <td>...</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>t</td>
+      <td>f</td>
+      <td>1</td>
+      <td>0.47</td>
+      <td>9.307398</td>
+      <td>0.692602</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>moderate</td>
+      <td>10.0</td>
+      <td>1436513</td>
+      <td>https://www.airbnb.com/rooms/1436513</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Spacious Sunny Bedroom Suite in Historic Home</td>
+      <td>Come experience the comforts of home away from...</td>
+      <td>Most places you find in Boston are small howev...</td>
+      <td>Come experience the comforts of home away from...</td>
+      <td>...</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>1.00</td>
+      <td>9.307398</td>
+      <td>0.692602</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>flexible</td>
+      <td>10.0</td>
+      <td>7651065</td>
+      <td>https://www.airbnb.com/rooms/7651065</td>
+      <td>20160906204935</td>
+      <td>2016-09-07</td>
+      <td>Come Home to Boston</td>
+      <td>My comfy, clean and relaxing home is one block...</td>
+      <td>Clean, attractive, private room, one block fro...</td>
+      <td>My comfy, clean and relaxing home is one block...</td>
+      <td>...</td>
+      <td>f</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>f</td>
+      <td>f</td>
+      <td>f</td>
+      <td>1</td>
+      <td>2.25</td>
+      <td>9.237421</td>
+      <td>0.762579</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 97 columns</p>
+</div>
+</div>
+</div>
+<p>Notice that the results are still indexed, but that any of the results which were in a group with a mean review score of less than or equal to 9.2 were not copied over.</p>
+</section>
+<section id="applying" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="applying"><span class="header-section-number">8.5</span> Applying</h2>
+<p>By far the most common operation I invoke on groupby objects is the apply() function. This allows you to apply an arbitrary function to each group, and stitch the results back for each apply() into a single dataframe where the index is preserved.</p>
+<p>Lets look at an example using our airbnb data, I’m going to get a clean copy of the dataframe:</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>pd.read_csv(<span class="st">"../data/week3/listings.csv"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># And lets just include some of the columns we were interested in previously</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[[<span class="st">'cancellation_policy'</span>,<span class="st">'review_scores_value'</span>]]</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>cancellation_policy</th>
+      <th>review_scores_value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>moderate</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>moderate</td>
+      <td>9.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>moderate</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>moderate</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>flexible</td>
+      <td>10.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>In previous work we wanted to find the average review score of a listing and its deviation from the group mean. This was a two step process, first we used transform() on the groupby object and then we had to broadcast to create a new column. With apply() we could wrap this logic in one place:</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_mean_review_scores(group):</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># group is a dataframe just of whatever we have grouped by, e.g. cancellation policy,     </span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">#so we can treat this as the complete dataframe</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    avg <span class="op">=</span> np.nanmean(group[<span class="st">'review_scores_value'</span>])</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#now braodcast our formula and create a new column</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    group[<span class="st">'review_scores_mean_diff'</span>] <span class="op">=</span> np.<span class="bu">abs</span>(avg <span class="op">-</span> group[<span class="st">'review_scores_value'</span>])</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> group</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">#now we apply this to all the groups</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">'cancellation_policy'</span>).<span class="bu">apply</span>(calc_mean_review_scores).head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>cancellation_policy</th>
+      <th>review_scores_value</th>
+      <th>review_scores_mean_diff</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>moderate</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>moderate</td>
+      <td>9.0</td>
+      <td>0.307398</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>moderate</td>
+      <td>10.0</td>
+      <td>0.692602</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>moderate</td>
+      <td>10.0</td>
+      <td>0.692602</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>flexible</td>
+      <td>10.0</td>
+      <td>0.762579</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Using apply can be slower than using some of the specialized functions, especially agg(). But, if your dataframes are not huge, it’s a solid general purpose approach.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../code/6_idioms.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Panda idioms</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../code/8_scales.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Scales</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

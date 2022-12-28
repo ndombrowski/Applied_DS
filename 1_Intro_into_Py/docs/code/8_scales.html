@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Applied Data Science Course 1 - 9&nbsp; Scales</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../code/9_pivot.html" rel="next">
+<link href="../code/7_groupby.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Scales</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Applied Data Science Course 1</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Data Science in Python</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/1_intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction into python</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/2_numpy.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Numpy</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/3_regular_expressions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Regex</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/4_pandas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Pandas</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/5_pandas2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data processing with pandas</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/6_idioms.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Panda idioms</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/7_groupby.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Grouping data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/8_scales.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Scales</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/9_pivot.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Pivot tables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../code/10_date_and_time.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Dates and times</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Scales</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>We’ve already seen that pandas supports a number of different computational data types such as strings, integers, floating point numbers. What this doesn’t capture is what we call the scale of the data.</p>
+<p>Let’s say that we have got a DataFrame of students and their academic levels such as being in grade one, grade two, and grade three. Is the difference between a student in grade one and a student in grade two the same as the difference between a student in grade eight and one grade nine?</p>
+<p>As a data scientist, there’s at least four different scales that’s worth knowing about:</p>
+<ol type="1">
+<li>Ratio scales:
+<ul>
+<li>Unites are equally spaces</li>
+<li>mathematical operations of +-* are valid</li>
+<li>I.e. height or weight</li>
+</ul></li>
+<li>Interval scale:
+<ul>
+<li>Measurement units are equally are spaced</li>
+<li>There is no true 0, so mathematical operations are not valid</li>
+<li>I.e. temperature in C</li>
+</ul></li>
+<li>Ordinal scale:
+<ul>
+<li>The order of the units is important but not evenly spaced</li>
+<li>Letter grades such as A+, A, B are a good example</li>
+</ul></li>
+<li>Nominal scale:
+<ul>
+<li>Categories of data, but the categories have no order with respect to each other</li>
+<li>Also called categorical data in python</li>
+<li>I.e. teams of a sport</li>
+</ul></li>
+</ol>
+<p>Pandas has a number of interesting functions to deal with converting between measurement scales.</p>
+<p>Lets first create a dataframe of letter grades in descending order. We can also set an index value and here we’ll just make it some human judgement of how good a student was, like “excellent” or “good”:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df<span class="op">=</span>pd.DataFrame([<span class="st">'A+'</span>, <span class="st">'A'</span>, <span class="st">'A-'</span>, <span class="st">'B+'</span>, <span class="st">'B'</span>, <span class="st">'B-'</span>, <span class="st">'C+'</span>, <span class="st">'C'</span>, <span class="st">'C-'</span>, <span class="st">'D+'</span>, <span class="st">'D'</span>],</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                index<span class="op">=</span>[<span class="st">'excellent'</span>, <span class="st">'excellent'</span>, <span class="st">'excellent'</span>, <span class="st">'good'</span>, <span class="st">'good'</span>, <span class="st">'good'</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                       <span class="st">'ok'</span>, <span class="st">'ok'</span>, <span class="st">'ok'</span>, <span class="st">'poor'</span>, <span class="st">'poor'</span>],</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>               columns<span class="op">=</span>[<span class="st">"Grades"</span>])</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Grades</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>excellent</th>
+      <td>A+</td>
+    </tr>
+    <tr>
+      <th>excellent</th>
+      <td>A</td>
+    </tr>
+    <tr>
+      <th>excellent</th>
+      <td>A-</td>
+    </tr>
+    <tr>
+      <th>good</th>
+      <td>B+</td>
+    </tr>
+    <tr>
+      <th>good</th>
+      <td>B</td>
+    </tr>
+    <tr>
+      <th>good</th>
+      <td>B-</td>
+    </tr>
+    <tr>
+      <th>ok</th>
+      <td>C+</td>
+    </tr>
+    <tr>
+      <th>ok</th>
+      <td>C</td>
+    </tr>
+    <tr>
+      <th>ok</th>
+      <td>C-</td>
+    </tr>
+    <tr>
+      <th>poor</th>
+      <td>D+</td>
+    </tr>
+    <tr>
+      <th>poor</th>
+      <td>D</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Now, if we check the datatype of this column, we see that it’s just an object, since we set string values:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>Grades    object
+dtype: object</code></pre>
+</div>
+</div>
+<p>We can, however, tell pandas that we want to change the type to category, using the <strong>astype()</strong> function:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Grades'</span>].astype(<span class="st">'category'</span>).head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>excellent    A+
+excellent     A
+excellent    A-
+good         B+
+good          B
+Name: Grades, dtype: category
+Categories (11, object): ['A', 'A+', 'A-', 'B', ..., 'C+', 'C-', 'D', 'D+']</code></pre>
+</div>
+</div>
+<p>We see now that there are eleven categories, and pandas is aware of what those categories are. More interesting though is that our data isn’t just categorical, but that it’s ordered. That is, an A- comes after a B+, and B comes before a B+.</p>
+<p>We can tell pandas that the data is ordered by first creating a new categorical data type with the list of the categories (in order) and the <code>ordered=True</code> flag:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>my_categories<span class="op">=</span>pd.CategoricalDtype(categories<span class="op">=</span>[<span class="st">'D'</span>, <span class="st">'D+'</span>, <span class="st">'C-'</span>, <span class="st">'C'</span>, <span class="st">'C+'</span>, <span class="st">'B-'</span>, <span class="st">'B'</span>, <span class="st">'B+'</span>, <span class="st">'A-'</span>, <span class="st">'A'</span>, <span class="st">'A+'</span>], ordered<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># then we can just pass this to the astype() function</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>grades<span class="op">=</span>df[<span class="st">"Grades"</span>].astype(my_categories)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>grades.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>excellent    A+
+excellent     A
+excellent    A-
+good         B+
+good          B
+Name: Grades, dtype: category
+Categories (11, object): ['D' &lt; 'D+' &lt; 'C-' &lt; 'C' ... 'B+' &lt; 'A-' &lt; 'A' &lt; 'A+']</code></pre>
+</div>
+</div>
+<p>Now we see that pandas is not only aware that there are 11 categories, but it is also aware of the order of those categories.</p>
+<p>So, what can you do with this? Well because there is an ordering this can help with comparisons and boolean masking. For instance, if we have a list of our grades and we compare them to a ‘C’ we see that the lexicographical comparison returns results we were not intending.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df[df[<span class="st">'Grades'</span>] <span class="op">&gt;</span> <span class="st">'C'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Grades</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ok</th>
+      <td>C+</td>
+    </tr>
+    <tr>
+      <th>ok</th>
+      <td>C-</td>
+    </tr>
+    <tr>
+      <th>poor</th>
+      <td>D+</td>
+    </tr>
+    <tr>
+      <th>poor</th>
+      <td>D</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>So a C+ is great than a C, but a C- and D are not. However, if we broadcast over the dataframe which has the type set to an ordered categorical:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>grades[grades <span class="op">&gt;</span> <span class="st">'C'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>excellent    A+
+excellent     A
+excellent    A-
+good         B+
+good          B
+good         B-
+ok           C+
+Name: Grades, dtype: category
+Categories (11, object): ['D' &lt; 'D+' &lt; 'C-' &lt; 'C' ... 'B+' &lt; 'A-' &lt; 'A' &lt; 'A+']</code></pre>
+</div>
+</div>
+<p>We see that the operator works as we would expect. We can then use a certain set of mathematical operators, like minimum, maximum, etc., on the ordinal data.</p>
+<p>Sometimes it is useful to represent categorical values as each being a column with a true or a false as to whether the category applies. This is especially common in feature extraction, which is a topic in the data mining course. Variables with a boolean value are typically called <strong>dummy variables</strong>, and pandas has a built in function called <strong>get_dummies</strong> which will convert the values of a single column into multiple columns of zeros and ones indicating the presence of the dummy variable.</p>
+<p>There’s one more common scale-based operation, and that’s on converting a scale from something that is on the interval or ratio scale, like a numeric grade, into one which is categorical.</p>
+<p>Now, this might seem a bit counter intuitive to you, since you are losing information about the value. But it’s commonly done in a couple of places. For instance, if you are visualizing the frequencies of categories, this can be an extremely useful approach, and histograms are regularly used with converted interval or ratio data. In addition, if you’re using a machine learning classification approach on data, you need to be using categorical data, so reducing dimensionality may be useful just to apply a given technique.</p>
+<p>Pandas has a function called <strong>cut</strong> which takes as an argument some array-like structure like a column of a dataframe or a series. It also takes a number of bins to be used, and all bins are kept at equal spacing.</p>
+<p>Lets go back to our census data for an example. We saw that we could group by state, then aggregate to get a list of the average county size by state. If we further apply cut to this with, say, ten bins, we can see the states listed as categoricals using the average county size.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'../data/week3/census.csv'</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#only work with country data</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[df[<span class="st">'SUMLEV'</span>] <span class="op">==</span> <span class="dv">50</span>]</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#work with only a few rows</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.set_index(<span class="st">'STNAME'</span>).groupby(level<span class="op">=</span><span class="dv">0</span>)[<span class="st">'CENSUS2010POP'</span>].agg(np.average)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>STNAME
+Alabama        71339.343284
+Alaska         24490.724138
+Arizona       426134.466667
+Arkansas       38878.906667
+California    642309.586207
+Name: CENSUS2010POP, dtype: float64</code></pre>
+</div>
+</div>
+<p>Now if we just want to make “bins” of each of these, we can use cut():</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pd.cut(df,<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>STNAME
+Alabama                   (11706.087, 75333.413]
+Alaska                    (11706.087, 75333.413]
+Arizona                 (390320.176, 453317.529]
+Arkansas                  (11706.087, 75333.413]
+California              (579312.234, 642309.586]
+Colorado                 (75333.413, 138330.766]
+Connecticut             (390320.176, 453317.529]
+Delaware                (264325.471, 327322.823]
+District of Columbia    (579312.234, 642309.586]
+Florida                 (264325.471, 327322.823]
+Georgia                   (11706.087, 75333.413]
+Hawaii                  (264325.471, 327322.823]
+Idaho                     (11706.087, 75333.413]
+Illinois                 (75333.413, 138330.766]
+Indiana                   (11706.087, 75333.413]
+Iowa                      (11706.087, 75333.413]
+Kansas                    (11706.087, 75333.413]
+Kentucky                  (11706.087, 75333.413]
+Louisiana                 (11706.087, 75333.413]
+Maine                    (75333.413, 138330.766]
+Maryland                (201328.118, 264325.471]
+Massachusetts           (453317.529, 516314.881]
+Michigan                 (75333.413, 138330.766]
+Minnesota                 (11706.087, 75333.413]
+Mississippi               (11706.087, 75333.413]
+Missouri                  (11706.087, 75333.413]
+Montana                   (11706.087, 75333.413]
+Nebraska                  (11706.087, 75333.413]
+Nevada                  (138330.766, 201328.118]
+New Hampshire            (75333.413, 138330.766]
+New Jersey              (390320.176, 453317.529]
+New Mexico                (11706.087, 75333.413]
+New York                (264325.471, 327322.823]
+North Carolina           (75333.413, 138330.766]
+North Dakota              (11706.087, 75333.413]
+Ohio                     (75333.413, 138330.766]
+Oklahoma                  (11706.087, 75333.413]
+Oregon                   (75333.413, 138330.766]
+Pennsylvania            (138330.766, 201328.118]
+Rhode Island            (201328.118, 264325.471]
+South Carolina           (75333.413, 138330.766]
+South Dakota              (11706.087, 75333.413]
+Tennessee                 (11706.087, 75333.413]
+Texas                    (75333.413, 138330.766]
+Utah                     (75333.413, 138330.766]
+Vermont                   (11706.087, 75333.413]
+Virginia                  (11706.087, 75333.413]
+Washington              (138330.766, 201328.118]
+West Virginia             (11706.087, 75333.413]
+Wisconsin                (75333.413, 138330.766]
+Wyoming                   (11706.087, 75333.413]
+Name: CENSUS2010POP, dtype: category
+Categories (10, interval[float64, right]): [(11706.087, 75333.413] &lt; (75333.413, 138330.766] &lt; (138330.766, 201328.118] &lt; (201328.118, 264325.471] ... (390320.176, 453317.529] &lt; (453317.529, 516314.881] &lt; (516314.881, 579312.234] &lt; (579312.234, 642309.586]]</code></pre>
+</div>
+</div>
+<p>Here we see that states like alabama and alaska fall into the same category, while california and the disctrict of columbia fall in a very different category.</p>
+<p>Now, cutting is just one way to build categories from your data, and there are many other methods. For instance, cut gives you interval data, where the spacing between each category is equal sized. But sometimes you want to form categories based on frequency – you want the number of items in each bin to the be the same, instead of the spacing between bins. It really depends on what the shape of your data is, and what you’re planning to do with it.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../code/7_groupby.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Grouping data</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../code/9_pivot.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Pivot tables</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

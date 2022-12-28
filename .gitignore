@@ -7,3 +7,4 @@
 *.Rhistory
 *content.sqlite*
 *index.sqlite
+*MERGED*csv

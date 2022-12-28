@@ -7,58 +7,58 @@ import re
 ```
 
 
-```{python}
-import pandas as pd
-sdata = {'Ohio': 35000, 'Texas': 71000, 'Oregon': 16000, 'Utah': 5000}
-obj1 = pd.Series(sdata)
-states = ['California', 'Ohio', 'Oregon', 'Texas']
-obj2 = pd.Series(sdata, index=states)
-obj3 = pd.isnull(obj2)
-```
+
+pd.merge(student_df, staff_df, how='left', left_index=True, right_index=True)
+
 
 
 ```{python}
-import math
-obj2['California'] == None
+frames = ['P2010', 'P2011', 'P2012', 'P2013','P2014', 'P2015']
+df['AVG'] = df[frames].apply(lambda z: np.mean(z), axis=x)
+result_df = df.drop(frames,axis=y)
 ```
 
 
-```{python}
-import pandas as pd
-d = {'1': 'Alice','2': 'Bob','3': 'Rita','4': 'Molly','5': 'Ryan'}
-S = pd.Series(d)
-S
-```
+x = 1
 
-
-```{python}
-S.iloc[0:3]
-```
-
-
-df.rename(mapper = lambda x: x.upper(), axis = 1)
+y = 1
 
 
 ```{python}
 import pandas as pd
-s1 = pd.Series({1: 'Alice', 2: 'Jack', 3: 'Molly'})
-s2 = pd.Series({'Alice': 1, 'Jack': 2, 'Molly': 3})
+df = pd.DataFrame(['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D'], index=['excellent', 'excellent', 'excellent', 'good', 'good', 'good', 'ok', 'ok', 'ok', 'poor', 'poor'], columns = ['Grades'])
 
+
+my_categories = pd.CategoricalDtype(categories=['D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+'], ordered=True)
+
+grades = df['Grades'].astype(my_categories)
+
+result = grades[(grades>'B') & (grades<'A')]
+result
 ```
+
+
+df.pivot_table(values='score', index='country', columns='Rank_Level', aggfunc=[np.median], margins=True)
 
 ```{python}
-#s2.loc[1]
-s1[2]
+import pandas as pd
+(pd.Timestamp('11/29/2019') + pd.offsets.MonthEnd()).weekday()
 ```
 
 
-Question 8
-Which of the following statements is incorrect?
 
-Qst 9
+df.groupby(group_key).apply(filling_mean)
 
-For the given DataFrame df shown above, we want to get all records with a toefl score greater than 105 but smaller than 115. Which of the following expressions is incorrect to perform the same?
 
-Qst 10:
+result_df = pd.merge(staff_df, student_df, how='right', on=['First Name', 'Last Name'])
 
-Which of the following is the correct way to extract all information related to the student named Alice from the DataFrame df given below:
+
+df.groupby('review_scores_value').agg({'name': len, 'reviews_per_month': (np.nanmean, np.nanstd)})
+
+
+
+```{python}
+import pandas as pd
+pd.Period('01/12/2019', 'M') + 5
+```
+

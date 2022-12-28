@@ -13,6 +13,12 @@ book:
     - code/3_regular_expressions.qmd
     - code/4_pandas.qmd
     - code/5_pandas2.qmd
+    - code/6_idioms.qmd
+    - code/7_groupby.qmd
+    - code/8_scales.qmd
+    - code/9_pivot.qmd
+    - code/10_date_and_time.qmd
+
 format:
   html:
     theme: cosmo
